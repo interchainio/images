@@ -1,8 +1,7 @@
-# Docker images
-
 [![CircleCI](https://circleci.com/gh/interchainio/docker/tree/master.svg?style=svg&circle-token=eb616dd897ad66e522e230ddd88142695068c9c3)](https://circleci.com/gh/interchainio/docker/tree/master)
-
 [![DepShield Badge](https://depshield.sonatype.org/badges/interchainio/docker/depshield.svg)](https://depshield.github.io)
+
+# Docker images
 
 Prerequisites:
 - Create a repository on DockerHub under the interchainio organization
