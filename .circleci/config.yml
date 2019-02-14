@@ -1,0 +1,46 @@
+version: 2.1
+
+# Required in CircleCI: DOCKERHUB_USER, DOCKERHUB_PASS
+
+commands:
+  build_image:
+    parameters:
+      step_name:
+        type: string
+      image_name:
+        type: string
+      organization:
+        type: string
+    steps:
+      - run:
+          name: << parameters.step_name >>
+          command: |
+            export LATEST_COMMIT_HASH=`git rev-list -1 HEAD`
+            export FOLDER_COMMIT_HASH=`git rev-list -1 HEAD << parameters.image_name >>`
+
+            if [[ $LATEST_COMMIT_HASH == $FOLDER_COMMIT_HASH ]]; then
+              cd << parameters.image_name >>
+              docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS
+              docker build -t << parameters.organization >>/<< parameters.image_name >> .
+              docker push << parameters.organization >>/<< parameters.image_name >>
+            fi
+
+jobs:
+  build:
+    machine: true
+    steps:
+      - checkout
+      - build_image:
+          step_name: "Build terragrunt"
+          image_name: "terragrunt"
+          organization: "interchain"
+
+workflows:
+  version: 2.1
+  images:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - master
