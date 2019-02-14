@@ -45,7 +45,8 @@ commands:
                 docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS
                 docker build -t "interchainio/$image" .
                 docker push "interchainio/$image"
-             fi
+              fi
+            done
 
 jobs:
   build:
