@@ -6,4 +6,3 @@ RUN wget https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGR
     chmod 755 /bin/terragrunt
 
 ENTRYPOINT ["/bin/terragrunt"]
-
