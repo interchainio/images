@@ -33,7 +33,7 @@ jobs:
       - build_image:
           step_name: "Build terragrunt"
           image_name: "terragrunt"
-          organization: "interchain"
+          organization: "interchainio"
 
 workflows:
   version: 2.1
