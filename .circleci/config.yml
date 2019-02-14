@@ -26,7 +26,6 @@ commands:
               docker build -t << parameters.organization >>/<< parameters.image_name >> .
               docker push << parameters.organization >>/<< parameters.image_name >>
             fi
-
   build_all:
     steps:
       - run:
@@ -53,17 +52,21 @@ jobs:
     machine: true
     steps:
       - checkout
-#      - build_image:
-#          step_name: "Build terragrunt"
-#          image_name: "terragrunt"
-#          organization: "interchainio"
-      - build_all:
+      - build_image:
+          step_name: "Build terragrunt"
+          image_name: "terragrunt"
+          organization: "interchainio"
+  build_all:
+    machine: true
+    steps:
+      - checkout
+      - build_all
 
 workflows:
   version: 2.1
   images:
     jobs:
-      - build:
+      - build_all:
           filters:
             branches:
               only:
