@@ -17,6 +17,8 @@ commands:
           command: |
             export LATEST_COMMIT_HASH=`git rev-list -1 HEAD`
             export FOLDER_COMMIT_HASH=`git rev-list -1 HEAD << parameters.image_name >>`
+            echo "LATEST_COMMIT_HASH=$LATEST_COMMIT_HASH"
+            echo "FOLDER_COMMIT_HASH=$FOLDER_COMMIT_HASH"
 
             if [[ $LATEST_COMMIT_HASH == $FOLDER_COMMIT_HASH ]]; then
               cd << parameters.image_name >>
