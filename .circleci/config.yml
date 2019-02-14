@@ -27,15 +27,37 @@ commands:
               docker push << parameters.organization >>/<< parameters.image_name >>
             fi
 
+  build_all:
+    steps:
+      - run:
+          name: build_all
+          command: |
+            for image in `ls | grep -v README.md`
+            do
+              echo "Processing $image"
+              export LATEST_COMMIT_HASH=`git rev-list -1 HEAD`
+              export FOLDER_COMMIT_HASH=`git rev-list -1 HEAD "$image"`
+              echo "LATEST_COMMIT_HASH=$LATEST_COMMIT_HASH"
+              echo "FOLDER_COMMIT_HASH=$FOLDER_COMMIT_HASH"
+
+              if [[ $LATEST_COMMIT_HASH == $FOLDER_COMMIT_HASH ]]; then
+                echo "Building..."
+                cd "$image"
+                docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS
+                docker build -t "interchainio/$image" .
+                docker push "interchainio/$image"
+             fi
+
 jobs:
   build:
     machine: true
     steps:
       - checkout
-      - build_image:
-          step_name: "Build terragrunt"
-          image_name: "terragrunt"
-          organization: "interchainio"
+#      - build_image:
+#          step_name: "Build terragrunt"
+#          image_name: "terragrunt"
+#          organization: "interchainio"
+      - build_all:
 
 workflows:
   version: 2.1
