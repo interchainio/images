@@ -31,8 +31,9 @@ commands:
       - run:
           name: build_all
           command: |
-            for image in `ls | grep -v README.md`
+            for image in `find . -d 1 -type d -name '[^.]*' -execdir echo {} ';'`
             do
+              test -f "$image/Dockerfile" || continue
               echo "Processing $image"
               export LATEST_COMMIT_HASH=`git rev-list -1 HEAD`
               export FOLDER_COMMIT_HASH=`git rev-list -1 HEAD "$image"`
