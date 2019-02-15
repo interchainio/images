@@ -31,7 +31,8 @@ commands:
       - run:
           name: build_all
           command: |
-            for image in `find . -d 1 -type d -name '[^.]*' -execdir echo {} ';'`
+            # The parameters in find are Linux-specific. OSX does not have the -printf command, use "-execdir echo {} ';'" instead.
+            for image in `find . -maxdepth 1 -type d -name '[^.]*' -printf '%f\n'`
             do
               test -f "$image/Dockerfile" || continue
               echo "Processing $image"
