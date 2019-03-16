@@ -8,8 +8,9 @@ RUN wget https://github.com/segmentio/chamber/releases/download/v${CHAMBER_VERSI
     grep linux chamber-v${CHAMBER_VERSION}.sha256sums | shasum -a 256 -c - && \
     rm chamber-v${CHAMBER_VERSION}.sha256sums && \
     mv chamber-v${CHAMBER_VERSION}-linux-amd64 /bin/chamber && \
-    chmod +x /bin/chamber && \
-    apt-get update && apt-get upgrade && apt-get install awscli
+    chmod +x /bin/chamber
+COPY --chown=circleci:circleci aws_config /home/circleci/.aws/config
+RUN apt-get update && apt-get upgrade && apt-get install awscli
 
 USER circleci:circleci
 SHELL ["/bin/bash", "-c"]
