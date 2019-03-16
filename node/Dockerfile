@@ -10,7 +10,7 @@ RUN wget https://github.com/segmentio/chamber/releases/download/v${CHAMBER_VERSI
     mv chamber-v${CHAMBER_VERSION}-linux-amd64 /bin/chamber && \
     chmod +x /bin/chamber
 COPY --chown=circleci:circleci aws_config /home/circleci/.aws/config
-RUN apt-get update && apt-get upgrade && apt-get install awscli
+RUN apt-get update && apt-get upgrade && apt-get install python3-pip && pip3 install awscli
 
 USER circleci:circleci
 SHELL ["/bin/bash", "-c"]
