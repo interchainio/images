@@ -1,4 +1,3 @@
-[profile role]
+[profile deploy]
 credential_source = Environment
-region = us-east-1
 output = json
