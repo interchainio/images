@@ -1,4 +1,0 @@
-[profile role]
-credential_source = Environment
-region = us-east-1
-output = json
