@@ -1,0 +1,52 @@
+#!/usr/bin/expect -f
+
+##
+## gpg-import will import a private key (given as an input parameter) to GPG.
+## The GPG_PASSPHRASE environment variable is used to unlock the key so both the private and public keys can be stored.
+## The GPG_PUBLIC_LONGKEY environment variable (last 16 digits of the public key fingerprint) is used to trust the key in gpg.conf.
+##
+
+set timeout 5
+
+if {[llength $argv] != 1} {
+  send_user "Usage: gpg-import <gpg_key_file>\n"
+  send_user "Please make sure GPG_PUBLIC_LONGKEY is set.\n"
+  send_user "Please make sure GPG_PASSPHRASE is set for private keys.\n"
+  exit 1
+}
+
+set KEYFILE [lindex $argv 0]
+
+if {![file readable ${KEYFILE}]} {
+  send_user "Private key file not readable or does not exist.\n"
+  exit 1
+}
+
+if {[catch {set GPG_PUBLIC_LONGKEY $env(GPG_PUBLIC_LONGKEY)} result]} {
+  send_user "Please make sure GPG_PUBLIC_LONGKEY is set.\n"
+  exit 1
+}
+
+spawn gpg --import ${KEYFILE}
+
+if {[catch {set GPG_PASSPHRASE $env(GPG_PASSPHRASE)} result]} {
+  send_user "GPG_PASSPHRASE is unset, assuming public key.\n"
+} else {
+  send_user "GPG_PASSPHRASE is set, assuming private key.\n"
+  expect "Passphrase: "
+  send "${GPG_PASSPHRASE}\r"
+}
+
+expect {
+  timeout { send_user "Failed to import private key because of timeout.\n"; exit 1}
+  eof { send_user "Failed to import private key because of eof.\n"; exit 1}
+  default { send_user "Failed to import private key because of unknown reason.\n"; exit 1}
+  "gpg:               imported: 1" { expect eof }
+  "gpg:   secret keys imported: 1" { expect eof }
+}
+
+
+set fp [open "$env(HOME)/.gnupg/gpg.conf" a+]
+puts $fp "trusted-key 0x${GPG_PUBLIC_LONGKEY}\n"
+close $fp
+

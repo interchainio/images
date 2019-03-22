@@ -1,0 +1,30 @@
+#!/usr/bin/expect -f
+
+##
+## gpg-cache-passphrase will take the passphrase stored in the GPG_PASSPHRASE environment variable and
+## sign the gpg.conf file in the user's home directory. (The file must exist.) This will cache the passphrase
+## in gpg-agent and further calls will not ask for it.
+##
+
+set timeout 1
+
+if {[llength $argv] != 0} {
+  send_user "Usage: gpg-cache-passphrase\n"
+  send_user "Please make sure GPG_PASSPHRASE is set.\n"
+  exit 1
+}
+
+if {[catch {set GPG_PASSPHRASE $env(GPG_PASSPHRASE)} result]} {
+  send_user "Please make sure GPG_PASSPHRASE is set.\n"
+  exit 1
+}
+
+spawn gpg -s "$env(HOME)/.gnupg/gpg.conf"
+expect "Passphrase: "
+send "${GPG_PASSPHRASE}\r"
+expect {
+  timeout { send_user "Failed to cache GPG_PASSPHRASE because of timeout.\n"; exit 1}
+  eof { send_user "Cached GPG_PASSPHRASE in gpg-agent.\n"; exit 0}
+  default { send_user "Failed to cache GPG_PASSPHRASE because of unknown reason.\n"; exit 1}
+}
+
