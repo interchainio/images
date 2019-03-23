@@ -24,7 +24,7 @@ COPY --from=build --chown=root:root /stoml_linux_amd64 /usr/bin/stoml
 COPY --from=build --chown=root:root /pinentry-tty /usr/bin/pinentry-tty
 COPY --chown=root:root ./gpg-import /usr/bin/gpg-import
 COPY --chown=root:root ./gpg-cache-passphrase /usr/bin/gpg-cache-passphrase
-RUN adduser -h /home/circleci -s /bin/bash -D -u 3434 circleci && apk update && apk upgrade && apk add git openssh python3 tar ca-certificates curl wget bash gnupg libsecret expect && rm -rf /usr/bin/pinentry && ln -sf /usr/bin/pinentry-tty /usr/bin/pinentry && chmod +x /usr/bin/gpg-import /usr/bin/gpg-cache-passphrase
+RUN adduser -h /home/circleci -s /bin/bash -D -u 3434 circleci && apk update && apk upgrade && apk add git openssh python3 tar ca-certificates curl wget bash gnupg libsecret expect && rm -rf /usr/bin/pinentry && ln -sf /usr/bin/pinentry-tty /usr/bin/pinentry && chmod +x /usr/bin/gpg-import /usr/bin/gpg-cache-passphrase && ln -sf /usr/bin/python3 /usr/bin/python
 
 USER circleci:circleci
 SHELL ["/bin/bash", "-c"]
