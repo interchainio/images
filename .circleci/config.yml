@@ -94,14 +94,15 @@ jobs:
       - build_ami
 
 workflows:
-  version: 2.1
-  images:
+  docker_deployment:
     jobs:
       - build_docker:
           filters:
             branches:
               only:
                 - master
+  ami_deployment:
+    jobs:
       - build_ami:
           context: dev_imagepacker
           filters:
