@@ -58,8 +58,8 @@ commands:
       - run:
           name: "Build all AMI images"
           command: |
-            # The parameters in find are Linux-specific. OSX does not have the -printf command, use "-execdir echo {} ';'" instead.
-            for image in `find . -maxdepth 1 -type d -name '[^.]*' -printf '%f\n'`
+            # The parameters in find are Linux-specific. OSX and Alpine does not have the -printf command, use "-execdir echo {} ';'" instead.
+            for image in `find . -maxdepth 1 -type d -name '[^.]*' -execdir echo {} ';'`
             do
               test -f "${image}/packer.json" || continue
               echo "Processing ${image}"
