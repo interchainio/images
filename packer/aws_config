@@ -1,0 +1,3 @@
+[profile deploy]
+credential_source = Environment
+output = json

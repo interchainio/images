@@ -1,15 +1,22 @@
 version: 2.1
 
-# Required in CircleCI: DOCKERHUB_USER, DOCKERHUB_PASS
+# Required in CircleCI: DOCKERHUB_USER, DOCKERHUB_PASS, AWS credentials in context
+
+executors:
+  ami_packer:
+    docker:
+      - image: interchainio/packer
+    environment:
+      AWS_REGION: us-east-1
 
 commands:
-  build_docker:
+  build_one_docker:
     parameters:
       image_name:
         type: string
     steps:
       - run:
-          name: "Build << parameters.image_name >>"
+          name: "Build << parameters.image_name >> docker image"
           command: |
             export LATEST_COMMIT_HASH=`git rev-list -1 HEAD`
             export FOLDER_COMMIT_HASH=`git rev-list -1 HEAD << parameters.image_name >>`
@@ -22,10 +29,10 @@ commands:
               docker build -t interchainio/<< parameters.image_name >> .
               docker push interchainio/<< parameters.image_name >>
             fi
-  build_all:
+  build_docker:
     steps:
       - run:
-          name: "Build All"
+          name: "Build all Docker images"
           command: |
             # The parameters in find are Linux-specific. OSX does not have the -printf command, use "-execdir echo {} ';'" instead.
             for image in `find . -maxdepth 1 -type d -name '[^.]*' -printf '%f\n'`
@@ -40,32 +47,69 @@ commands:
               if [[ $LATEST_COMMIT_HASH == $FOLDER_COMMIT_HASH ]]; then
                 echo "Building..."
                 cd "${image}"
-                if [ -f Dockerfile ]; then
-                  docker login -u "${DOCKERHUB_USER}" -p "${DOCKERHUB_PASS}"
-                  docker build -t "interchainio/${image}" .
-                  docker push "interchainio/${image}"
-                fi
+                docker login -u "${DOCKERHUB_USER}" -p "${DOCKERHUB_PASS}"
+                docker build -t "interchainio/${image}" .
+                docker push "interchainio/${image}"
+              fi
+            done
+
+  build_ami:
+    steps:
+      - run:
+          name: "Build all AMI images"
+          command: |
+            # The parameters in find are Linux-specific. OSX does not have the -printf command, use "-execdir echo {} ';'" instead.
+            for image in `find . -maxdepth 1 -type d -name '[^.]*' -printf '%f\n'`
+            do
+              test -f "${image}/packer.json" || continue
+              echo "Processing ${image}"
+              export LATEST_COMMIT_HASH=`git rev-list -1 HEAD`
+              export FOLDER_COMMIT_HASH=`git rev-list -1 HEAD "${image}"`
+              echo "LATEST_COMMIT_HASH=$LATEST_COMMIT_HASH"
+              echo "FOLDER_COMMIT_HASH=$FOLDER_COMMIT_HASH"
+
+              if [[ $LATEST_COMMIT_HASH == $FOLDER_COMMIT_HASH ]]; then
+                echo "Building..."
+                cd "${image}"
+                packer build packer.json
               fi
             done
 
 jobs:
+  build_one_docker:
+    machine: true
+    steps:
+      - checkout
+      - build_one_docker:
+          image_name: "node"
   build_docker:
     machine: true
     steps:
       - checkout
-      - build_docker:
-          image_name: "node"
-  build_all:
-    machine: true
+      - build_docker
+  build_ami:
+    executor: ami_packer
     steps:
       - checkout
-      - build_all
+      - build_ami
 
 workflows:
   version: 2.1
   images:
     jobs:
-      - build_all:
+      - build_docker:
+          filters:
+            branches:
+              only:
+                - master
+      - build_ami:
+          context: dev_imagepacker
+          filters:
+            branches:
+              only:
+                - develop
+      - build_ami:
+          context: prod_imagepacker
           filters:
             branches:
               only:

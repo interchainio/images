@@ -12,6 +12,7 @@ RUN apk update && apk upgrade && apk add jq ansible && \
     adduser -D -u 3434 -s /bin/bash circleci
 
 USER circleci:circleci
+COPY --chown=circleci:circleci aws_config /home/circleci/.aws/config
 SHELL ["/bin/bash", "-c"]
 WORKDIR /home/circleci
 
