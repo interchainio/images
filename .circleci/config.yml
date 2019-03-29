@@ -16,8 +16,10 @@ commands:
           name: "Build all Docker images"
           command: |
             echo "`find . -maxdepth 1 -type d -name '[^.]*' | sed 's,./,,' | tr '\n' ' '`"
+            docker login -u "${DOCKERHUB_USER}" -p "${DOCKERHUB_PASS}"
             for image in `find . -maxdepth 1 -type d -name '[^.]*' | sed 's,./,,' | tr '\n' ' '`
             do
+              echo "for ${image}..."
               test -f "${image}/Dockerfile" || continue
               echo "Processing ${image}"
               export LATEST_COMMIT_HASH=`git rev-list -1 HEAD`
@@ -31,11 +33,11 @@ commands:
               if [[ $LATEST_COMMIT_HASH == $FOLDER_COMMIT_HASH ]]; then
                 echo "Building..."
                 cd "${image}"
-                docker login -u "${DOCKERHUB_USER}" -p "${DOCKERHUB_PASS}"
                 docker build -t "interchainio/${image}" .
                 docker push "interchainio/${image}"
               fi
             done
+            docker logout
 
   build_ami:
     steps:
