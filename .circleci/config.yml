@@ -70,9 +70,13 @@ jobs:
       - build_docker
   build_ami:
     executor: ami_packer
+    parameters:
+      product_name:
+        type: string
     steps:
       - checkout
       - build_ami
+          product_name: << parameters.product_name >>
 
 workflows:
   docker_deployment:
