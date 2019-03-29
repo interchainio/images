@@ -6,6 +6,7 @@
 
   "builders": [
     {
+      "profile": "deploy",
       "type": "amazon-ebs",
       "region": "us-east-1",
       "source_ami": "{{ user `source_ami` }}",

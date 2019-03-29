@@ -15,11 +15,9 @@ commands:
       - run:
           name: "Build all Docker images"
           command: |
-            echo "`find . -maxdepth 1 -type d -name '[^.]*' | sed 's,./,,' | tr '\n' ' '`"
             docker login -u "${DOCKERHUB_USER}" -p "${DOCKERHUB_PASS}"
-            for image in `find . -maxdepth 1 -type d -name '[^.]*' | sed 's,./,,' | tr '\n' ' '`
+            for image in `find . -maxdepth 1 -type d -name '[^.]*' | sed 's,./,,'`
             do
-              echo "for ${image}..."
               test -f "${image}/Dockerfile" || continue
               echo "Processing ${image}"
               export LATEST_COMMIT_HASH=`git rev-list -1 HEAD`
@@ -27,14 +25,9 @@ commands:
               echo "LATEST_COMMIT_HASH=$LATEST_COMMIT_HASH"
               echo "FOLDER_COMMIT_HASH=$FOLDER_COMMIT_HASH"
 
-              #Trigger all builds temporarily
-              export LATEST_COMMIT_HASH=$FOLDER_COMMIT_HASH
-
               if [[ $LATEST_COMMIT_HASH == $FOLDER_COMMIT_HASH ]]; then
                 echo "Building..."
-                cd "${image}"
-                docker build -t "interchainio/${image}" .
-                cd ..
+                docker build -t "interchainio/${image}" "${image}"
                 docker push "interchainio/${image}"
               fi
             done
@@ -45,7 +38,8 @@ commands:
       - run:
           name: "Build all AMI images"
           command: |
-            for image in `find . -maxdepth 1 -type d -name '[^.]*' | sed 's,./,,' | tr '\n' ' '`
+            echo "role_arn = `aws ssm get-parameters --name /<< parameters.product_name >>/role_arn --region ${AWS_REGION} | jq -r .Parameters[0].Value`" >> ${HOME}/.aws/config
+            for image in `find . -maxdepth 1 -type d -name '[^.]*' | sed 's,./,,'`
             do
               test -f "${image}/packer.json" || continue
               echo "Processing ${image}"
@@ -61,6 +55,7 @@ commands:
                 echo "Building..."
                 cd "${image}"
                 packer build packer.json
+                cd ..
               fi
             done
 
@@ -87,12 +82,14 @@ workflows:
   ami_deployment:
     jobs:
       - build_ami:
+          product_name: dev_imagepacker
           context: dev_imagepacker
           filters:
             branches:
               only:
                 - master
       - build_ami:
+          product_name: prod_imagepacker
           context: prod_imagepacker
           filters:
             branches:
