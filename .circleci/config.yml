@@ -15,8 +15,7 @@ commands:
       - run:
           name: "Build all Docker images"
           command: |
-            # The parameters in find are Linux-specific. OSX does not have the -printf command, use "-execdir echo {} ';'" instead.
-            for image in `find . -maxdepth 1 -type d -name '[^.]*' -printf '%f\n'`
+            for image in `find . -maxdepth 1 -type d -name '[^.]*' | sed 's,./,,'`
             do
               test -f "${image}/Dockerfile" || continue
               echo "Processing ${image}"
@@ -31,7 +30,7 @@ commands:
               if [[ $LATEST_COMMIT_HASH == $FOLDER_COMMIT_HASH ]]; then
                 echo "Building..."
                 cd "${image}"
-                docker login -u "${DOCKERHUB_USER}" -p "${DOCKERHUB_PASS}"
+                docker login -u "${DOCKERHUB_USER}" --password-stdin <<< "${DOCKERHUB_PASS}"
                 docker build -t "interchainio/${image}" .
                 docker push "interchainio/${image}"
               fi
@@ -42,7 +41,6 @@ commands:
       - run:
           name: "Build all AMI images"
           command: |
-            # The parameters in find are Linux-specific. This one works on Alpine.
             for image in `find . -maxdepth 1 -type d -name '[^.]*' | sed 's,./,,'`
             do
               test -f "${image}/packer.json" || continue
