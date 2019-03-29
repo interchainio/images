@@ -34,6 +34,7 @@ commands:
                 echo "Building..."
                 cd "${image}"
                 docker build -t "interchainio/${image}" .
+                cd ..
                 docker push "interchainio/${image}"
               fi
             done
