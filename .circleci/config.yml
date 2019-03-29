@@ -15,6 +15,7 @@ commands:
       - run:
           name: "Build all Docker images"
           command: |
+            echo "`find . -maxdepth 1 -type d -name '[^.]*' | sed 's,./,,' | tr '\n' ' '`"
             for image in `find . -maxdepth 1 -type d -name '[^.]*' | sed 's,./,,' | tr '\n' ' '`
             do
               test -f "${image}/Dockerfile" || continue
