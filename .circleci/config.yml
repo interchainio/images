@@ -34,6 +34,9 @@ commands:
             docker logout
 
   build_ami:
+    parameters:
+      product_name:
+        type: string
     steps:
       - run:
           name: "Build all AMI images"
