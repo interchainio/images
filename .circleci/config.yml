@@ -41,7 +41,11 @@ commands:
       - run:
           name: "Build all AMI images"
           command: |
-            echo "role_arn = `aws ssm get-parameters --name /<< parameters.product_name >>/role_arn --region ${AWS_REGION} | jq -r .Parameters[0].Value`" >> ${HOME}/.aws/config
+            export AWS_ROLE="$(aws ssm get-parameters --name /<< parameters.product_name >>/role_arn --region ${AWS_REGION} --query 'Parameters[0].Value')"
+            export AWS_STS=($(aws sts assume-role --output text --role-arn ${AWS_ROLE} --role-session-name packer-ami-build --duration-seconds 900 --query '[Credentials.AccessKeyId,Credentials.SecretAccessKey,Credentials.SessionToken,Credentials.Expiration]'))
+            export AWS_ACCESS_KEY_ID="${AWS_STS[0]}"
+            export AWS_SECRET_ACCESS_KEY="${AWS_STS[1]}"
+            export AWS_SESSION_TOKEN="${AWS_STS[2]}"
             for image in `find . -maxdepth 1 -type d -name '[^.]*' | sed 's,./,,'`
             do
               test -f "${image}/packer.json" || continue

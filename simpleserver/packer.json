@@ -1,12 +1,11 @@
 {
   "variables": {
-    "source_ami": "ami-9887c6e7",
+    "source_ami": "ami-02eac2c0129f6376b",
     "debug": "{{env `DEBUG`}}"
   },
 
   "builders": [
     {
-      "profile": "deploy",
       "type": "amazon-ebs",
       "region": "us-east-1",
       "source_ami": "{{ user `source_ami` }}",
@@ -15,12 +14,12 @@
       "ami_name": "Interchain Linux simpleserver image",
       "ami_description": "Interchain Linux simpleserver image {{ timestamp }}",
       "tags": {
-        "OS": "CentOS",
+        "OS": "Interchain CentOS Linux 7 x86_64",
         "Previous_OS": "{{ .SourceAMIName }}",
         "Previous_Tags": "{{ .SourceAMITags.TagName }}"
       },
       "run_tags": {
-        "Name": "Gaia {{ user `gaia_version` }} OS {{ user `source_ami_description` }}"
+        "Name": "simpleserver"
       },
       "associate_public_ip_address": true,
       "disable_stop_instance": false
