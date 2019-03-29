@@ -1,0 +1,13 @@
+---
+
+- hosts: all
+  any_errors_fatal: true
+  gather_facts: no
+  become: yes
+  become_user: root
+  roles:
+    - updates
+    - { role: debug, when: DEBUG is defined and (DEBUG | bool) }
+    - journald
+    - openfiles
+    - datadog
