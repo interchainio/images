@@ -83,15 +83,13 @@ jobs:
           product_name: << parameters.product_name >>
 
 workflows:
-  docker_deployment:
+  deploy:
     jobs:
       - build_docker:
           filters:
             branches:
               only:
                 - master
-  ami_deployment:
-    jobs:
       - build_ami:
           product_name: dev_imagepacker
           context: dev_imagepacker
