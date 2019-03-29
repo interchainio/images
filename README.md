@@ -1,6 +1,6 @@
-|develop|master|
-|:-----:|:----:|
-|[![CircleCI](https://circleci.com/gh/interchainio/images/tree/develop.svg?style=svg&circle-token=eb616dd897ad66e522e230ddd88142695068c9c3)](https://circleci.com/gh/interchainio/images/tree/develop)|[![CircleCI](https://circleci.com/gh/interchainio/images/tree/master.svg?style=svg&circle-token=eb616dd897ad66e522e230ddd88142695068c9c3)](https://circleci.com/gh/interchainio/images/tree/master)|
+|master|
+|:----:|
+|[![CircleCI](https://circleci.com/gh/interchainio/images/tree/master.svg?style=svg&circle-token=eb616dd897ad66e522e230ddd88142695068c9c3)](https://circleci.com/gh/interchainio/images/tree/master)|
 
 [![DepShield Badge](https://depshield.sonatype.org/badges/interchainio/images/depshield.svg)](https://depshield.github.io)
 
