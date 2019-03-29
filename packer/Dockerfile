@@ -2,7 +2,12 @@ FROM alpine:3.9
 
 ENV PACKER_VERSION=1.3.5
 
-RUN apk update && apk upgrade && apk add jq git py3-pip ansible && pip3 install awscli && \
+# `apk add ansible` installs PyYAML and `pip3 install awscli` fails because of dependency conflict.
+# Instead of installing an older ansible from the package repository, we build a fresh version using pip.
+RUN apk update && apk upgrade && apk add jq git py3-pip && \
+    apk add python3-dev gcc musl-dev libffi-dev make openssl-dev && \
+    pip3 install awscli ansible && \
+    apk del python3-dev gcc musl-dev libffi-dev make openssl-dev && \
     wget https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip && \
     wget https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_SHA256SUMS && \
     grep packer_${PACKER_VERSION}_linux_amd64.zip packer_${PACKER_VERSION}_SHA256SUMS > packer_linux_sha && \
