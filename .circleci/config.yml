@@ -75,7 +75,7 @@ jobs:
         type: string
     steps:
       - checkout
-      - build_ami
+      - build_ami:
           product_name: << parameters.product_name >>
 
 workflows:
