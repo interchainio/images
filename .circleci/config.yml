@@ -15,7 +15,7 @@ commands:
       - run:
           name: "Build all Docker images"
           command: |
-            for image in `find . -maxdepth 1 -type d -name '[^.]*' | sed 's,./,,'`
+            for image in `find . -maxdepth 1 -type d -name '[^.]*' | sed 's,./,,' | tr '\n' ' '`
             do
               test -f "${image}/Dockerfile" || continue
               echo "Processing ${image}"
@@ -41,7 +41,7 @@ commands:
       - run:
           name: "Build all AMI images"
           command: |
-            for image in `find . -maxdepth 1 -type d -name '[^.]*' | sed 's,./,,'`
+            for image in `find . -maxdepth 1 -type d -name '[^.]*' | sed 's,./,,' | tr '\n' ' '`
             do
               test -f "${image}/packer.json" || continue
               echo "Processing ${image}"
