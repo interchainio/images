@@ -12,6 +12,8 @@
       "instance_type": "t3.medium",
       "ssh_username": "centos",
       "ami_name": "Interchain Linux simpleserver image",
+      "force_deregister": "true",
+      "force_delete_snapshot": "true",
       "ami_description": "Interchain Linux simpleserver image {{ timestamp }}",
       "tags": {
         "OS": "Interchain CentOS Linux 7 x86_64",
