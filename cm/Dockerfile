@@ -6,7 +6,7 @@ RUN apk update && apk upgrade && apk add bash git py3-pip && \
     apk add python3-dev gcc musl-dev libffi-dev make openssl-dev && \
     pip3 install awscli ansible boto && \
     apk del python3-dev gcc musl-dev libffi-dev make openssl-dev && \
-    ln -sf /usr/bin/python3 /usr/bin/python
+    ln -sf /usr/bin/python3 /usr/bin/python && \
     adduser -D -u 3434 -s /bin/bash circleci
 
 USER circleci:circleci
