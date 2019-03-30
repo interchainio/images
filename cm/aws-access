@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Get elevated AWS access for 10 minutes
+# This file needs to be sourced.
+
+if [ -n "${1}" ] && [ -n "${AWS_REGION}" ]; then
+
+  export AWS_ROLE="$(aws ssm get-parameters --output text --name /${1}/role_arn --region ${AWS_REGION} --query 'Parameters[0].Value')"
+  export AWS_STS=($(aws sts assume-role --output text --role-arn "${AWS_ROLE}" --role-session-name temp-access --duration-seconds 900 --query '[Credentials.AccessKeyId,Credentials.SecretAccessKey,Credentials.SessionToken,Credentials.Expiration]'))
+  export AWS_ACCESS_KEY_ID="${AWS_STS[0]}"
+  export AWS_SECRET_ACCESS_KEY="${AWS_STS[1]}"
+  export AWS_SESSION_TOKEN="${AWS_STS[2]}"
+
+else
+  echo "Input parameter: ${1}"
+  echo "AWS_REGION: ${AWS_REGION}"
+  echo "One is missing."
+fi
+
