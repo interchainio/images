@@ -1,0 +1,3 @@
+[profile aws]
+credential_source = Environment
+output = text
