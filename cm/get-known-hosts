@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+
+# Print available known SSH keys from DynamoDB
+
+# Database has "instanceid, ip, key" keys
+
+import boto3
+import argparse
+import os
+import sys
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--region", default=os.environ.get('AWS_REGION'), help="AWS Region")
+    parser.add_argument("--table", default='ec2cm', help="DynamoDB table name")
+    parser.add_argument("--output", help="Output file")
+    args = parser.parse_args()
+
+    ddb = boto3.client('dynamodb', region_name=args.region)
+    ddbEntries = ddb.scan(TableName=args.table)
+    if ddbEntries == None:
+        raise IOError("Could not connect to DynamoDB.")
+    if ddbEntries["ResponseMetadata"]["HTTPStatusCode"] != 200:
+        raise IOError("HTTP return {0}".format(ddbEntries["ResponseMetadata"]["HTTPStatusCode"]))
+
+    if args.output is not None:
+        sys.stdout = open(args.output, 'a+')
+    for entry in ddbEntries["Items"]:
+        print("{0} {1} {2}".format(entry["ip"]["S"], entry["key"]["S"], entry["instanceid"]["S"]))
