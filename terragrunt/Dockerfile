@@ -11,4 +11,4 @@ RUN apk update && apk upgrade && apk add bash py3-pip && \
     wget https://github.com/freshautomations/stemplate/releases/download/v${STEMPLATE_VERSION}/stemplate_linux_amd64 -O /bin/stemplate && chmod 755 /bin/stemplate
 
 ENTRYPOINT ["/bin/bash"]
-
+ 
