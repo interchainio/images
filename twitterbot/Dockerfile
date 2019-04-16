@@ -1,6 +1,6 @@
 FROM alpine:3.9
 
-ENV STAKE_DIST_VERSION=1.0.1
+ENV STAKE_DIST_VERSION=1.1.0
 
 RUN apk update && apk upgrade && apk add bash ruby git && \
     gem install rdoc || gem install network && \
