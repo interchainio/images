@@ -1,6 +1,6 @@
 FROM alpine:3.9
 
-ENV STAKE_DIST_VERSION=1.0.1
+ENV STAKE_DIST_VERSION=1.1.0
 ENV STEMPLATE_VERSION=0.3.0
 
 RUN apk update && apk upgrade && apk add bash ruby && \
