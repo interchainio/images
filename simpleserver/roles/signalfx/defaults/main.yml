@@ -1,0 +1,8 @@
+---
+#From: https://github.com/signalfx/signalfx-agent/blob/master/deployments/ansible/roles/signalfx-agent/defaults/main.yml
+# Default values for for Signalfx Agent installation
+
+sfx_repo_base_url: https://dl.signalfx.com
+sfx_package_stage: final
+sfx_version: latest
+

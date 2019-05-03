@@ -11,4 +11,4 @@
     - { role: debug, when: DEBUG is defined and (DEBUG | bool) }
     - journald
     - openfiles
-    - datadog
+    - signalfx
