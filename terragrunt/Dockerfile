@@ -3,7 +3,7 @@ FROM hashicorp/terraform:0.11.11
 ENV TERRAGRUNT_VERSION=0.18.3
 ENV STOML_VERSION=0.3.0
 ENV STEMPLATE_VERSION=0.3.0
-ENV SIGNALFORM_VERSION=0.0.1
+ENV SIGNALFORM_VERSION=0.0.2
 
 RUN apk update && apk upgrade && apk add bash py3-pip && \
     pip3 install boto3 && \
