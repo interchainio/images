@@ -1,4 +1,4 @@
-FROM hashicorp/terraform:0.11.11
+FROM hashicorp/terraform:0.11.13
 
 ENV TERRAGRUNT_VERSION=0.18.3
 ENV STOML_VERSION=0.3.0
