@@ -1,5 +1,7 @@
 FROM alpine:3.9
 
+ENV AWS_REGION=us-east-1
+
 COPY aws-access /usr/bin
 # `apk add ansible` installs PyYAML and `pip3 install awscli` fails because of dependency conflict.
 # Instead of installing an older ansible from the package repository, we build a fresh version using pip.
