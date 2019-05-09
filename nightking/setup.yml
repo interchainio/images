@@ -12,3 +12,8 @@
     - journald
     - openfiles
     - terraform
+    - tm-load-test
+# Telegraf
+# Grafana
+# InfluxDB
+# Tendermint seed node

@@ -35,6 +35,10 @@
         "--extra-vars",
         "DEBUG={{user `debug`}}"
       ]
+    },
+    {
+      "type": "shell",
+      "script": "setup.bash"
     }
   ]
 }
