@@ -1,7 +1,8 @@
 ---
 
-- name: Install EPEL
-  yum: name=epel-release state=present
+# Amazon Linux
+#- name: Install EPEL
+#  yum: name=epel-release state=present
 
 - name: Update to latest packages
   yum: "name='*' state=latest"
