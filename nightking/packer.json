@@ -12,6 +12,12 @@
       "ami_name": "Interchain Nightking image {{ timestamp }}",
       "force_deregister": "true",
       "force_delete_snapshot": "true",
+      "launch_block_device_mappings": [{
+        "device_name": "/dev/xvda",
+        "volume_size": 8,
+        "volume_type": "gp2",
+        "delete_on_termination": true
+      }],
       "ami_description": "Interchain Nightking image {{ timestamp }}",
       "tags": {
         "OS": "Interchain Amazon Linux",
