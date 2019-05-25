@@ -1,0 +1,18 @@
+---
+
+- name: Install jq
+  yum: "name=jq state=installed"
+
+- name: Get stemplate
+  get_url:
+    url: https://github.com/freshautomations/stemplate/releases/download/v0.3.0/stemplate_linux_amd64
+    dest: /usr/bin/stemplate
+    checksum: sha256:55cbd63598093b53874a0a46371306da8332bdc367b90ac4c4ab5a87298f7bbc
+    mode: 0755
+
+- name: Get stoml
+  get_url:
+    url: https://github.com/freshautomations/stoml/releases/download/v0.3.0/stoml_linux_amd64
+    dest: /usr/bin/stoml
+    checksum: sha256:1d2996df7fc3a51a9c39055f9d1d180eb23f7f7a55f3424d5697ffc7a856f5a3
+    mode: 0755

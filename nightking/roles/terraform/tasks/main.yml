@@ -17,7 +17,3 @@
 
 - name: Cleanup terraform post-install
   file: path=/tmp/terraform.zip state=absent
-
-- name: Copy files - placeholder for nightking tasks
-  copy: src=terraform.tf dest=/home/ec2-user/terraform.tf
-  become: no

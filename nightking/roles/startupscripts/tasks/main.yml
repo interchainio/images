@@ -1,0 +1,7 @@
+---
+
+- name: Copy startup scripts
+  copy: "src=. dest=/root mode=0755"
+
+- name: Enable startup script at startup
+  cron: job=/root/startup.bash special_time=reboot

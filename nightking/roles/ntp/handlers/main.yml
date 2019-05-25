@@ -1,0 +1,4 @@
+---
+
+- name: enable ntp
+  systemd: name=ntpd enabled=yes

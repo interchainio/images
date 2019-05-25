@@ -7,13 +7,14 @@
   become_user: root
   roles:
     - updates
-    - packages
+    - custom
+    - ntp
     - { role: debug, when: DEBUG is defined and (DEBUG | bool) }
     - journald
     - openfiles
     - terraform
+    - tendermint
     - tm-load-test
-# Telegraf
-# Grafana
-# InfluxDB
-# Tendermint seed node
+    - monitoring
+    - experiments
+    - startupscripts

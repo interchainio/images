@@ -1,0 +1,4 @@
+---
+
+- name: Copy experiments scripts
+  copy: "src=. dest=/etc/xp/"

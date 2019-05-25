@@ -1,0 +1,5 @@
+---
+
+- name: Install ntp daemon
+  yum: name=ntp
+  notify: enable ntp

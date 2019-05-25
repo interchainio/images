@@ -15,6 +15,3 @@
 - name: Install tm-load-test service
   copy: src=tm-load-test.service dest=/etc/systemd/system/tm-load-test.service
   notify: reload systemd
-
-- name: Copy tm-load-test config
-  copy: src=tm-load-test.toml dest=/home/tm-load-test/tm-load-test.toml owner=tm-load-test group=tm-load-test

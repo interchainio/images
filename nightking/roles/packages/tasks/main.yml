@@ -1,7 +1,0 @@
----
-
-- name: Install packages
-  yum: "name={{ item }} state=installed"
-  with_items:
-    - jq
-

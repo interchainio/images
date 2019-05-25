@@ -19,13 +19,14 @@
         "delete_on_termination": true
       }],
       "ami_description": "Interchain Nightking image {{ timestamp }}",
+      "ami_groups": ["all"],
       "tags": {
         "OS": "Interchain Amazon Linux",
         "Previous_OS": "{{ .SourceAMIName }}",
         "Previous_Tags": "{{ .SourceAMITags.TagName }}"
       },
       "run_tags": {
-        "Name": "nightking"
+        "Name": "nightking-packer"
       },
       "associate_public_ip_address": true,
       "disable_stop_instance": false
