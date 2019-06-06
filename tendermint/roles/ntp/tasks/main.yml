@@ -1,0 +1,5 @@
+---
+
+- name: Install ntp daemon
+  yum: name=ntp lock_timeout=180
+  notify: enable ntp

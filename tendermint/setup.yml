@@ -1,0 +1,16 @@
+---
+
+- hosts: all
+  any_errors_fatal: true
+  gather_facts: yes
+  become: yes
+  become_user: root
+  roles:
+    - updates
+    - gomplate
+    - ntp
+    - journald
+    - openfiles
+    - tendermint
+    - monitoring
+    - startupscripts

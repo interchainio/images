@@ -1,0 +1,33 @@
+---
+
+- name: Create Tendermint group
+  group: name=tendermint
+
+- name: Create Tendermint user
+  user:
+    name: tendermint
+    group: tendermint
+    shell: /bin/bash
+    create_home: yes
+
+- name: Download Tendermint binary
+  get_url:
+    url: https://github.com/tendermint/tendermint/releases/download/v0.31.7/tendermint_v0.31.7_linux_amd64.zip
+    dest: /tmp/tendermint.zip
+    checksum: sha256:5d2f43adfe8e964d2e694aeddad52f6783ee6ee9b79c2177840a64a4a09f1a45
+
+- name: Install Tendermint binary
+  unarchive:
+    src: /tmp/tendermint.zip
+    dest: /usr/bin
+    remote_src: yes
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Cleanup Tendermint post-install
+  file: path=/tmp/tendermint.zip state=absent
+
+- name: Install Tendermint service
+  copy: src=tendermint.service dest=/etc/systemd/system/tendermint.service
+  notify: reload systemd
