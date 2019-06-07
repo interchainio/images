@@ -7,22 +7,21 @@ along with Telegraf for monitoring.
 ## AMIs
 Here is a list of the current AMIs available, built from this image:
 
-* Interchain Tendermint v0.31.7-1559855449: `ami-05aea553b510b4f06`
+* Interchain Tendermint v0.31.7-1559942711: `ami-0ef4bcf9fbbf5d427`
 
 All other information in this README only pertains to the latest version of this
 image, unless otherwise specified.
 
 ## Usage
 When launching an instance based on this AMI, you will need to configure the
-following user data (in TOML format):
+following user data (which will be `source`d to convert each parameter to an
+environment variable during startup):
 
-```toml
-[influx_db]
-url = "http://127.0.0.1:8086"
-skip_database_creation = true
-database = "tendermint"
-username = "tendermint"
-password = "somepassword"
+```bash
+INFLUXDB_URL="http://influxdb-host:8086"
+INFLUXDB_DATABASE=tendermint
+INFLUXDB_USERNAME=tendermint
+INFLUXDB_PASSWORD=somepassword
 ```
 
 At present, this allows one to override the InfluxDB configuration for the
