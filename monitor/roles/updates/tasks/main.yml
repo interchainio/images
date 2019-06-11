@@ -1,0 +1,10 @@
+---
+
+- name: Update to latest packages
+  yum: "name='*' state=latest lock_timeout=180"
+
+- name: Install yum-cron
+  yum: name=yum-cron state=latest lock_timeout=180
+
+- name: Copy yum-cron config
+  copy: src=yum-cron.conf dest=/etc/yum/yum-cron.conf
