@@ -7,7 +7,7 @@ along with Telegraf for monitoring.
 ## AMIs
 Here is a list of the current AMIs available, built from this image:
 
-* Interchain Tendermint v0.31.7-1559942711: `ami-0ef4bcf9fbbf5d427`
+* Interchain Tendermint v0.31.7-1560260679: `ami-0bd0860cdbabfad70`
 
 All other information in this README only pertains to the latest version of this
 image, unless otherwise specified.
@@ -22,6 +22,7 @@ INFLUXDB_URL="http://influxdb-host:8086"
 INFLUXDB_DATABASE=tendermint
 INFLUXDB_USERNAME=tendermint
 INFLUXDB_PASSWORD=somepassword
+TENDERMINT_NODE_ID=node2
 ```
 
 At present, this allows one to override the InfluxDB configuration for the
