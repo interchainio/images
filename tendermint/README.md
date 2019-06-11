@@ -7,7 +7,7 @@ along with Telegraf for monitoring.
 ## AMIs
 Here is a list of the current AMIs available, built from this image:
 
-* Interchain Tendermint v0.31.7-1560260679: `ami-0bd0860cdbabfad70`
+* Interchain Tendermint v0.31.7-1560266257: `ami-01a43142f16749cd3`
 
 All other information in this README only pertains to the latest version of this
 image, unless otherwise specified.
@@ -18,6 +18,7 @@ following user data (which will be `source`d to convert each parameter to an
 environment variable during startup):
 
 ```bash
+TELEGRAF_COLLECTION_INTERVAL=10s
 INFLUXDB_URL="http://influxdb-host:8086"
 INFLUXDB_DATABASE=tendermint
 INFLUXDB_USERNAME=tendermint
