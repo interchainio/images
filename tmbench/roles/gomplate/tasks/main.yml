@@ -1,0 +1,8 @@
+---
+
+- name: Download gomplate binary
+  get_url:
+    url: https://github.com/hairyhenderson/gomplate/releases/download/v3.5.0/gomplate_linux-amd64
+    dest: /usr/bin/gomplate
+    checksum: sha256:bab28cab8cc4ef81015090f4deb6a81559d5a36e33dc7805ddd18bda62b0b0f4
+    mode: 0755

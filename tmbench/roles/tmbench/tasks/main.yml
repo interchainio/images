@@ -1,0 +1,7 @@
+---
+
+- name: Deploy tm-bench executable
+  copy:
+    src: "{{ tmbench_bin }}"
+    dest: /usr/bin/tm-bench
+    mode: 0755

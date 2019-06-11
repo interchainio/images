@@ -1,0 +1,20 @@
+---
+
+- name: Download Telegraf
+  get_url:
+    url: https://dl.influxdata.com/telegraf/releases/telegraf-1.10.4-1.x86_64.rpm
+    checksum: sha256:758eb6857665019a7cb7c678c2684b9268fd448ec6c439e84d1f823aeecf676a
+    dest: /tmp/telegraf.rpm
+
+# Install Telegraf without starting it yet
+- name: Install Telegraf
+  yum: name=/tmp/telegraf.rpm state=present lock_timeout=180
+  notify: daemon reload
+
+- name: Remove install packages
+  file: path=/tmp/telegraf.rpm state=absent
+
+- name: Copy Telegraf configuration template
+  copy:
+    src: telegraf.conf
+    dest: /root/telegraf.conf
