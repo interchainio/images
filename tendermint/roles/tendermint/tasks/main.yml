@@ -31,3 +31,17 @@
 - name: Install Tendermint service
   copy: src=tendermint.service dest=/etc/systemd/system/tendermint.service
   notify: reload systemd
+
+- name: Configure rsyslog for Tendermint
+  copy: src=tendermint-rsyslog.conf dest=/etc/rsyslog.d/tendermint.conf
+  notify: restart rsyslog
+
+- name: Initialize Tendermint with default config and empty database
+  shell: tendermint init --home /home/tendermint/.tendermint
+
+- name: Ensure Tendermint user owns home folder
+  file:
+    path: /home/tendermint/
+    owner: tendermint
+    group: tendermint
+    recurse: yes

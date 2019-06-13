@@ -14,5 +14,13 @@ set -a
 source /root/user-data
 set +a
 
-/root/setup-tendermint.bash
-/root/setup-telegraf.bash
+# Always deploy the Telegraf configuration
+gomplate -f /root/telegraf.conf > /etc/telegraf/telegraf.conf
+
+# Enable and (re)start Telegraf
+systemctl enable telegraf
+systemctl restart telegraf
+
+# Enable and start Tendermint
+systemctl enable tendermint
+systemctl start tendermint

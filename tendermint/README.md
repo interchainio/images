@@ -5,12 +5,16 @@ simple Amazon Linux-based machine that runs a recent release of Tendermint,
 along with Telegraf for monitoring.
 
 ## AMIs
-Here is a list of the current AMIs available, built from this image:
+The latest version of this AMI is `Interchain Tendermint v0.31.7-1560460186`,
+which is available in the following regions:
 
-* Interchain Tendermint v0.31.7-1560266257: `ami-01a43142f16749cd3`
-
-All other information in this README only pertains to the latest version of this
-image, unless otherwise specified.
+* `us-east-1`: `ami-0d344de126a83ea6b`
+* `us-east-2`: `ami-067d2e270cd38fd54`
+* `us-west-1`: `ami-0a071719aeb9b2be9`
+* `ap-northeast-2`: `ami-04295cb28e32d0c8d`
+* `ap-southeast-2`: `ami-095989d88defa6094`
+* `eu-central-1`: `ami-09bd44e6ab6b8db91`
+* `eu-west-1`: `ami-08600767435c2f0d3`
 
 ## Usage
 When launching an instance based on this AMI, you will need to configure the
@@ -18,16 +22,20 @@ following user data (which will be `source`d to convert each parameter to an
 environment variable during startup):
 
 ```bash
+# Set the interval at which Telegraf polls the Tendermint node for metrics
 TELEGRAF_COLLECTION_INTERVAL=10s
+# Where Telegraf should send its collected metrics
 INFLUXDB_URL="http://influxdb-host:8086"
 INFLUXDB_DATABASE=tendermint
 INFLUXDB_USERNAME=tendermint
 INFLUXDB_PASSWORD=somepassword
+# A tag for this node's metrics
 TENDERMINT_NODE_ID=node2
+# Which DC is this node running in? (will be added to metrics)
+DC=us-east-1
+# A group tag for this node's metrics
+GROUP=groupid
 ```
-
-At present, this allows one to override the InfluxDB configuration for the
-Telegraf instance that will run on this machine.
 
 ## Configuration
 To override the Tendermint node's configuration, it is recommended that one use
