@@ -7,7 +7,7 @@ machine from which to execute
 ## AMIs
 Here is a list of the current AMIs available, built from this image:
 
-* Interchain Tendermint tm-bench v0.31.7-1560263729: `ami-01a7f3616737e7806`
+* Interchain Tendermint tm-bench v0.31.7-1560437628: `ami-0f02eb0325711c2dd`
 
 All other information in this README only pertains to the latest version of this
 image, unless otherwise specified.
