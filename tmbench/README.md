@@ -7,7 +7,8 @@ machine from which to execute
 ## AMIs
 Here is a list of the current AMIs available, built from this image:
 
-* Interchain Tendermint tm-bench v0.31.7-1560437628: `ami-0f02eb0325711c2dd`
+* Interchain Tendermint tm-bench v0.31.7-1560787065: `ami-0760f51e3146afbf9et`
+  (`us-east-1`)
 
 All other information in this README only pertains to the latest version of this
 image, unless otherwise specified.
@@ -23,12 +24,17 @@ INFLUXDB_DATABASE=tendermint
 INFLUXDB_USERNAME=tendermint
 INFLUXDB_PASSWORD=somepassword
 
-TMBENCH_ENDPOINTS="tendermint-host:26657"
-TMBENCH_TIME=10
-TMBENCH_BROADCAST_TX_METHOD=async
-TMBENCH_CONNECTIONS=1
-TMBENCH_RATE=100
-TMBENCH_SIZE=250
+# Each of these parameters is a semi-colon-separated array of different
+# executions of tm-bench that will be executed sequentially. Make sure there is
+# no trailing semi-colon, as this will break the script.
+TMBENCH_ENDPOINTS="tendermint-host:26657;tendermint-host:26657;tendermint-host:26657"
+TMBENCH_TIME=5;5;5
+TMBENCH_BROADCAST_TX_METHOD=async;async;async
+TMBENCH_CONNECTIONS=1;1;1
+TMBENCH_RATE=1000;2000;3000
+TMBENCH_SIZE=250;250;250
+# The number of seconds to wait between each execution of tm-bench.
+TMBENCH_FINISH_WAIT=0
 ```
 
 See [`tm-bench`](https://github.com/tendermint/tendermint/tree/master/tools/tm-bench)

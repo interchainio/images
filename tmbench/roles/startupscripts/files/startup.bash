@@ -34,14 +34,7 @@ systemctl restart telegraf
 # -----------------------------------------------------------------------------
 # Execute the transactions once started up
 # -----------------------------------------------------------------------------
-tm-bench \
-    -T ${TMBENCH_TIME} \
-    -broadcast-tx-method ${TMBENCH_BROADCAST_TX_METHOD} \
-    -c ${TMBENCH_CONNECTIONS} \
-    -r ${TMBENCH_RATE} \
-    -s ${TMBENCH_SIZE} \
-    -v \
-    ${TMBENCH_ENDPOINTS}
+/root/execute-tm-bench.bash
 
 # -----------------------------------------------------------------------------
 # Automatically shut down the instance
