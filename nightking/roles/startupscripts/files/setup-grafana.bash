@@ -2,7 +2,9 @@
 
 set -xeuo pipefail
 
-test -f /root/.grafana-setup-finished && exit
+test -f /var/log/nightking/.grafana-setup-finished && exit
+
+source /usr/local/sbin/library.bash
 
 # Enable HTTPS
 sed -i 's/^\(\s\|;\|#\)*protocol\s*=.*$/protocol = https/' /etc/grafana/grafana.ini
@@ -21,9 +23,9 @@ datasources:
   - name: influx
     type: influxdb
     access: proxy
-    url: https://$(cat /root/public-hostname):8086
+    url: https://${PUBLIC_HOSTNAME}:8086
     user: telegraf
-    password: $(cat /root/influx-telegraf-password)
+    password: ${INFLUX_TELEGRAF_PASSWORD}
     database: telegraf
     isDefault: true
     editable: false
@@ -53,30 +55,24 @@ sleep 3
 
 # Set Home page
 set +e # Debug
-NIGHTKING_ID="$(curl -s -H "Content-Type: application/json" "https://admin:admin@$(cat /root/public-hostname)/api/search?folderIds=0&query=Nightking%20status" | jq .[0].id)"
-curl -X PUT -s -H "Content-Type: application/json" "https://admin:admin@$(cat /root/public-hostname)/api/user/preferences" -d "{\"homeDashboardId\":${NIGHTKING_ID}}"
+NIGHTKING_ID="$(curl -s -H "Content-Type: application/json" "https://admin:admin@${PUBLIC_HOSTNAME}/api/search?folderIds=0&query=Nightking%20status" | jq .[0].id)"
+curl -X PUT -s -H "Content-Type: application/json" "https://admin:admin@${PUBLIC_HOSTNAME}/api/user/preferences" -d "{\"homeDashboardId\":${NIGHTKING_ID}}"
 
-log() { # Log script results to influx DB
-  influx -ssl -host $(cat /root/public-hostname) -username telegraf -password $(cat /root/influx-telegraf-password) -database telegraf -execute "INSERT nightking ${1}=${2}"
-}
-
-touch /root/.grafana-setup-finished
+touch /var/log/nightking/.grafana-setup-finished
 log tick 0
 
-# Get Input
+# Change web password
 set +e
-test -f /root/user-data || curl http://169.254.169.254/latest/user-data > /root/user-data
-## Sanitize PASSWORD input
 LOG_PASSWORD=0
-trap 'log password 12 ; exit' ERR
-export PASSWORD="$(stoml /root/user-data PASSWORD)"
 trap 'log password 11 ; exit' ERR
-pw_data="{\"oldPassword\":\"admin\",\"newPassword\":\"${PASSWORD}\",\"confirmNew\":\"${PASSWORD}\"}"
-PW_RESULT="$(curl -X PUT -H "Content-Type: application/json" -d "${pw_data}" "https://admin:admin@$(cat /root/public-hostname)/api/user/password")"
-
-if [[ "${PW_RESULT}" == "{\"message\":\"New password is too short\"}" ]]; then
-  log password 10
-  exit
+if [ "${PASSWORD_TAG}" != "admin" ]; then
+  pw_data="{\"oldPassword\":\"admin\",\"newPassword\":\"${PASSWORD_TAG}\",\"confirmNew\":\"${PASSWORD_TAG}\"}"
+  PW_RESULT="$(curl -X PUT -H "Content-Type: application/json" -d "${pw_data}" "https://admin:admin@$${PUBLIC_HOSTNAME}/api/user/password")"
+  if [[ "${PW_RESULT}" == "{\"message\":\"New password is too short\"}" ]]; then
+    log password 10
+    exit
+  fi
 fi
+
 log password 0
 set -e

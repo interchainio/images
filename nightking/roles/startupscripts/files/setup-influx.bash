@@ -2,15 +2,13 @@
 
 set -xeuo pipefail
 
-test -f /root/.influx-setup-finished && exit
+test -f /var/log/nightking/.influx-setup-finished && exit
 
-openssl rand -base64 48 > /root/influx-telegraf-password
-chmod 400 /root/influx-telegraf-password
-openssl rand -base64 48 > /root/influx-admin-password
-chmod 400 /root/influx-admin-password
+source /usr/local/sbin/library.bash
+
 systemctl start influxdb
 sleep 5
-influx -precision rfc3339 -execute "CREATE USER admin WITH PASSWORD '$(cat /root/influx-admin-password)' WITH ALL PRIVILEGES; CREATE DATABASE telegraf; CREATE USER telegraf WITH PASSWORD '$(cat /root/influx-telegraf-password)'; GRANT ALL ON telegraf TO telegraf"
+influx -precision rfc3339 -execute "CREATE USER admin WITH PASSWORD '${INFLUX_ADMIN_PASSWORD}' WITH ALL PRIVILEGES; CREATE DATABASE telegraf; CREATE USER telegraf WITH PASSWORD '${INFLUX_TELEGRAF_PASSWORD}'; GRANT ALL ON telegraf TO telegraf"
 systemctl stop influxdb
 
 #Set up minimal config changes
@@ -25,4 +23,4 @@ systemctl enable influxdb
 systemctl start influxdb
 sleep 5
 
-touch /root/.influx-setup-finished
+touch /var/log/nightking/.influx-setup-finished

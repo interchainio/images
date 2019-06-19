@@ -2,11 +2,12 @@
 
 set -xeuo pipefail
 
-test -f /root/.tls-setup-finished && exit
+test -f /var/log/nightking/.tls-setup-finished && exit
 
-curl -s http://169.254.169.254/latest/meta-data/public-hostname > /root/public-hostname
-hostname $(cat /root/public-hostname)
-echo "127.0.0.1   $(cat /root/public-hostname)" >> /etc/hosts
+source /usr/local/sbin/library.bash
+
+hostname "${PUBLIC_HOSTNAME}"
+echo "127.0.0.1   ${PUBLIC_HOSTNAME}" >> /etc/hosts
 
 DATE="$(date '+%Y-%m-%d %H:%M:%S')"
 ca() {
@@ -27,7 +28,7 @@ nightking() {
   echo "Toronto"
   echo "Game of Tendermint"
   echo ""
-  echo "$(cat /root/public-hostname)"
+  echo "${PUBLIC_HOSTNAME}"
   echo "hello@interchain.io"
   echo ""
   echo ""
@@ -56,4 +57,4 @@ cat /etc/ssl/nightking.key /etc/ssl/nightking.crt > /etc/ssl/influxdb.pem
 chmod 400 /etc/ssl/influxdb.pem
 chown influxdb.influxdb /etc/ssl/influxdb.pem
 
-touch /root/.tls-setup-finished
+touch /var/log/nightking/.tls-setup-finished

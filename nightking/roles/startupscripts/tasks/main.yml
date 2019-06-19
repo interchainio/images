@@ -1,7 +1,10 @@
 ---
 
 - name: Copy startup scripts
-  copy: "src=. dest=/root mode=0755"
+  copy: "src=. dest=/usr/local/sbin mode=0755"
+
+- name: Create log folder
+  file: path=/var/log/nightking state=directory
 
 - name: Enable startup script at startup
-  cron: job=/root/startup.bash special_time=reboot
+  cron: job=/usr/local/sbin/startup.bash special_time=reboot

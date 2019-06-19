@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-exec > /root/startup.output
+exec > /var/log/nightking/startup.output
 exec 2>&1
 set -xeuo pipefail
 
-if [ ! -f /root/.startup-finished ]; then
+if [ ! -f /var/log/nightking/.startup-finished ]; then
   # Create TICK stack for monitoring
-  /root/create-tls.bash
-  /root/setup-influx.bash
-  /root/setup-telegraf.bash
-  /root/setup-grafana.bash
-  touch /root/.startup-finished
+  /usr/local/sbin/create-tls.bash
+  /usr/local/sbin/setup-influx.bash
+  /usr/local/sbin/setup-telegraf.bash
+  /usr/local/sbin/setup-grafana.bash
+  touch /var/log/nightking/.startup-finished
 fi
 
-/root/experiment.bash
+/usr/local/sbin/experiment.bash
