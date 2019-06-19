@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 exec > /var/log/nightking/experiment.output
 exec 2>&1
-set -xeuo pipefail
+set -euo pipefail
 source /usr/local/sbin/library.bash
 
 ## Sanitize EXPERIMENT input
@@ -28,7 +28,6 @@ log seed 0
 trap '' ERR
 
 # Set up terraform
-# Todo: find out how to get access to AWS
 trap 'log terraform_build 12' ERR
 cd /etc/experiments/"${XP}"/terraform
 trap 'log terraform_build 11' ERR

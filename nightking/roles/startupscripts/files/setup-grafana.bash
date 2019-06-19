@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -xeuo pipefail
+set -euo pipefail
 
 test -f /var/log/nightking/.grafana-setup-finished && exit
 
@@ -65,9 +65,12 @@ log tick 0
 set +e
 LOG_PASSWORD=0
 trap 'log password 11 ; exit' ERR
-if [ "${PASSWORD_TAG}" != "admin" ]; then
+if [ "${PASSWORD_TAG}" == "admin" ]; then
+  log password 12
+  exit
+else
   pw_data="{\"oldPassword\":\"admin\",\"newPassword\":\"${PASSWORD_TAG}\",\"confirmNew\":\"${PASSWORD_TAG}\"}"
-  PW_RESULT="$(curl -X PUT -H "Content-Type: application/json" -d "${pw_data}" "https://admin:admin@$${PUBLIC_HOSTNAME}/api/user/password")"
+  PW_RESULT="$(curl -X PUT -H "Content-Type: application/json" -d "${pw_data}" "https://admin:admin@${PUBLIC_HOSTNAME}/api/user/password")"
   if [[ "${PW_RESULT}" == "{\"message\":\"New password is too short\"}" ]]; then
     log password 10
     exit

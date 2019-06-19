@@ -145,7 +145,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "description": "Indicates if the password was received properly through user-data",
+      "description": "Indicates if the password was received properly through instance tag",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -247,7 +247,7 @@
         },
         {
           "op": "=",
-          "text": "could not read user-data",
+          "text": "could not read password or default set",
           "value": "12"
         }
       ],
@@ -276,7 +276,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "description": "Indicates if the experiment name was received properly through user-data",
+      "description": "Indicates if the experiment name was received properly through instance tag",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -368,7 +368,7 @@
         },
         {
           "op": "=",
-          "text": "could not read from user-data",
+          "text": "could not read from tag",
           "value": "11"
         },
         {

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 exec > /var/log/nightking/startup.output
 exec 2>&1
-set -xeuo pipefail
+set -euo pipefail
 
 if [ ! -f /var/log/nightking/.startup-finished ]; then
   # Create TICK stack for monitoring

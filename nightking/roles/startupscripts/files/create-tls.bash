@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -xeuo pipefail
+set -euo pipefail
 
 test -f /var/log/nightking/.tls-setup-finished && exit
 
