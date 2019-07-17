@@ -5,9 +5,9 @@
 
 - name: Get stemplate
   get_url:
-    url: https://github.com/freshautomations/stemplate/releases/download/v0.3.0/stemplate_linux_amd64
+    url: https://github.com/freshautomations/stemplate/releases/download/v0.5.0/stemplate_linux_amd64
     dest: /usr/bin/stemplate
-    checksum: sha256:55cbd63598093b53874a0a46371306da8332bdc367b90ac4c4ab5a87298f7bbc
+    checksum: sha256:fa689ccaa086adbee333800818cb3d46aaab3283d9099a2d4a2aa5aaee2c76dd
     mode: 0755
 
 - name: Get stoml

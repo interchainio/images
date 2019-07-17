@@ -5,6 +5,7 @@ set -euo pipefail
 test -f /var/log/nightking/.influx-setup-finished && exit
 
 source /usr/local/sbin/library.bash
+# Do not use the log function here, since influxdb is not set up yet.
 
 systemctl start influxdb
 sleep 5

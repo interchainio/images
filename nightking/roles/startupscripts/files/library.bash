@@ -15,6 +15,15 @@ get-public-hostname() {
 export PUBLIC_HOSTNAME="$(get-public-hostname)"
 
 
+# Get public ip - always up-to-date
+get-public-ip() {
+  curl -s http://169.254.169.254/latest/meta-data/public-ip
+}
+
+# Public ip variable
+export PUBLIC_IP="$(get-public-ip)"
+
+
 # Get instance ID
 get-instance-id() {
   test -f /var/log/nightking/instance-id || curl -s http://169.254.169.254/latest/meta-data/instance-id > /var/log/nightking/instance-id
@@ -31,7 +40,7 @@ get-aws-region() {
   cat /var/log/nightking/aws-region
 }
 
-# Public hostname variable
+# Public AWS region variable
 export AWS_REGION="$(get-aws-region)"
 
 
@@ -72,7 +81,7 @@ get-experiments() {
 export EXPERIMENTS="$(get-experiments)"
 
 
-# Log script results to influx DB
+# Log script results to influx DB - depends on setup-influx.bash successful run. Not tested, because only the setup-influx.bash script needs to be aware of it
 log() {
   influx -ssl -host "${PUBLIC_HOSTNAME}" -username telegraf -password "${INFLUX_TELEGRAF_PASSWORD}" -database telegraf -execute "INSERT nightking ${1}=${2}"
 }
