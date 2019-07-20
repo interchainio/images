@@ -5,7 +5,7 @@
 
 # TCP or UNIX socket address of the ABCI application,
 # or the name of an ABCI application compiled in with the Tendermint binary
-proxy_app = "tcp://127.0.0.1:26658"
+proxy_app = "kvstore"
 
 # A custom human readable name for this node
 moniker = "xp0 nightking seed"
@@ -152,7 +152,7 @@ addr_book_file = "config/addrbook.json"
 
 # Set true for strict address routability rules
 # Set false for private or local networks
-addr_book_strict = true
+addr_book_strict = false
 
 # Maximum number of inbound peers
 max_num_inbound_peers = 40
@@ -185,7 +185,7 @@ seed_mode = true
 private_peer_ids = ""
 
 # Toggle to disable guard against peers connecting from the same ip.
-allow_duplicate_ip = false
+allow_duplicate_ip = true
 
 # Peer connection configuration.
 handshake_timeout = "20s"

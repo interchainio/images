@@ -1,9 +1,0 @@
----
-
-- hosts: all
-  any_errors_fatal: true
-  gather_facts: no
-  become: yes
-  become_user: root
-  tasks:
-    - debug: "msg='Write your roles and tasks'"

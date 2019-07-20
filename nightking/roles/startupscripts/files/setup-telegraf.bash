@@ -12,7 +12,7 @@ sed -i 's/^\(\s\|#\)*\[\[outputs\.influxdb\]\].*$/#[[outputs.influxdb]]/' /etc/t
 # Add real influx connection
 cat << EOF > /etc/telegraf/telegraf.d/influx.conf
 [[outputs.influxdb]]
-  urls = ["https://${PUBLIC_HOSTNAME}:8086"]
+  urls = ["https://${NIGHTKING_HOSTNAME}:8086"]
   skip_database_creation = true
   username = "telegraf"
   password = "${INFLUX_TELEGRAF_PASSWORD}"
