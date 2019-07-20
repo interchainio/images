@@ -1,12 +1,12 @@
-{{ range counter .starks }}
-module stark{{.}} {
+{{ range counter .whitewalkers }}
+module whitewalker{{.}} {
   source = "terraform-templates-modules-0a1/server"
-  region = "{{ left (index $.starks_zones .) (sub (len (index $.starks_zones .)) 1) }}"
-  availability_zone = "{{ index $.starks_zones . }}"
+  region = "{{ left (index $.whitewalkers_zones .) (sub (len (index $.whitewalkers_zones .)) 1) }}"
+  availability_zone = "{{ index $.whitewalkers_zones . }}"
   ami_owner = "{{ $.AMI_OWNER }}"
   ami_name = "{{ $.AMI_NAME }}"
   instance_type = "{{ $.instance_type }}"
-  role = "stark"
+  role = "whitewalker"
   id = "{{ . }}"
   nightking_hostname = "{{ $.NIGHTKING_HOSTNAME }}"
   nightking_ip = "{{ $.NIGHTKING_IP }}"

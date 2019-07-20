@@ -3,13 +3,33 @@ exec > /var/log/nightking/startup.output
 exec 2>&1
 set -euo pipefail
 
+source /usr/local/sbin/library.bash
+
 if [ ! -f /var/log/nightking/.startup-finished ]; then
-  # Create TICK stack for monitoring
-  /usr/local/sbin/create-tls.bash
-  /usr/local/sbin/setup-influx.bash
+  if [ "${ROLE}" == "nightking" ]; then
+    # Create InfluxDB and Grafana for monitoring
+    /usr/local/sbin/create-tls.bash
+    /usr/local/sbin/setup-influx.bash
+    /usr/local/sbin/setup-grafana.bash
+  else
+    echo "${CACERT}" >> /etc/ssl/certs/ca-bundle.crt
+  fi
   /usr/local/sbin/setup-telegraf.bash
-  /usr/local/sbin/setup-grafana.bash
   touch /var/log/nightking/.startup-finished
 fi
 
-/usr/local/sbin/experiment.bash
+
+case "${ROLE}" in
+  "nightking")
+    /usr/local/sbin/nightking.bash
+    ;;
+  "whitewalker")
+    /usr/local/sbin/whitewalker.bash
+    ;;
+  "stark")
+    /usr/local/sbin/stark.bash
+    ;;
+  *)
+    echo "Cannot understand ROLE=${ROLE}" > /var/log/nightking/.startup-error
+    ;;
+esac

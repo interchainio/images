@@ -9,8 +9,5 @@
 - name: enable grafana
   systemd: name=grafana-server enabled=yes daemon_reload=yes
 
-- name: enable nginx
-  systemd: name=nginx enabled=yes daemon_reload=yes
-
 - name: daemon reload
   systemd: daemon_reload=yes

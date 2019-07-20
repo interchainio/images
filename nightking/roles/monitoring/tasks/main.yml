@@ -48,7 +48,7 @@
     - /tmp/telegraf.rpm
     - /tmp/grafana.rpm
 
-- name: Install nginx on Amazon Linux
-  command: "amazon-linux-extras install -y nginx1.12"
-  args:
-    creates: /usr/lib/systemd/system/nginx.service
+#- name: Install nginx on Amazon Linux
+#  command: "amazon-linux-extras install -y nginx1.12"
+#  args:
+#    creates: /usr/lib/systemd/system/nginx.service

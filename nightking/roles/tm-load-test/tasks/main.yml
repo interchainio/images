@@ -6,12 +6,8 @@
 - name: Install tm-load-test binary
   get_url:
     url: https://github.com/interchainio/tm-load-test/releases/download/v0.2.0/tm-load-test
-    dest: /usr/local/bin/tm-load-test
+    dest: /usr/bin/tm-load-test
     checksum: sha256:5fdee6c2305c295a6479c47f7067724513e3d86e789b94cc5c4d00253a1ded35
     mode: 0755
     owner: root
     group: root
-
-- name: Install tm-load-test service
-  copy: src=tm-load-test.service dest=/etc/systemd/system/tm-load-test.service
-  notify: reload systemd

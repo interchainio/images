@@ -13,6 +13,7 @@
     - journald
     - openfiles
     - terraform
+    - terraform-templates
     - tendermint
     - tm-load-test
     - monitoring
