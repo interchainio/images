@@ -34,8 +34,18 @@ variable "nightking_hostname" {
   type = "string"
 }
 
-variable "nightking_ip" {
-  description = "Nightking IP"
+variable "nightking_public_ip" {
+  description = "Nightking public IP"
+  type = "string"
+}
+
+variable "nightking_private_ip" {
+  description = "Nightking private IP"
+  type = "string"
+}
+
+variable "nightking_seed_node_id" {
+  description = "Nightking Tendermint seed node ID"
   type = "string"
 }
 
@@ -49,8 +59,8 @@ variable telegraf {
   type = "string"
 }
 
-variable cacert {
-  description = "Nightking CA certificate"
+variable user_data_base64_rendered {
+  description = "Nightking CA certificate application through user_data"
   type = "string"
 }
 

@@ -7,7 +7,6 @@
   become_user: root
   roles:
     - updates
-    - custom
     - ntp
     - { role: debug, when: DEBUG is defined and (DEBUG | bool) }
     - journald

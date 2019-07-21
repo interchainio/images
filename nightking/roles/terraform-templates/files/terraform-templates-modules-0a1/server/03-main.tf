@@ -10,6 +10,7 @@ resource aws_instance server {
   iam_instance_profile = "${aws_iam_instance_profile.server.name}"
   security_groups = ["${aws_security_group.server.name}"]
   key_name = "${aws_key_pair.server.key_name}"
+  user_data_base64 = "${var.user_data_base64_rendered}"
   root_block_device {
     volume_size = "${var.volume_size}"
   }
@@ -18,8 +19,9 @@ resource aws_instance server {
     id = "${var.id}"
     role = "${var.role}"
     nightking-hostname = "${var.nightking_hostname}"
-    nightking-ip = "${var.nightking_ip}"
+    nightking-ip = "${var.nightking_public_ip}"
+    nightking-private-ip = "${var.nightking_private_ip}"
     telegraf = "${var.telegraf}"
-    cacert = "${var.cacert}"
+    nightking-seed-node-id = "${var.nightking_seed_node_id}"
   }
 }

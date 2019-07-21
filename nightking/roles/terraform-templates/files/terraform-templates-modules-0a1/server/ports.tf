@@ -12,7 +12,7 @@ resource "aws_security_group" "server" {
     from_port = 22
     protocol = "tcp"
     to_port = 22
-    cidr_blocks = ["${var.nightking_ip}/32"]
+    cidr_blocks = ["${var.nightking_public_ip}/32", "${var.nightking_private_ip}/32"]
   }
 
   egress {

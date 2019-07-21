@@ -94,6 +94,7 @@ data "aws_iam_policy_document" "ec2_permissions" {
 
     actions = [
       "ec2:*",
+      "iam:*",
     ]
 
     resources = [

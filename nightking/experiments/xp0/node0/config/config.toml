@@ -16,7 +16,7 @@ moniker = "xp0 stark node{{.ID}}"
 fast_sync = true
 
 # Database backend: leveldb | memdb | cleveldb
-db_backend = "leveldb"
+db_backend = "goleveldb"
 
 # Database directory
 db_dir = "data"
@@ -139,7 +139,7 @@ laddr = "tcp://0.0.0.0:26656"
 external_address = ""
 
 # Comma separated list of seed nodes to connect to
-seeds = "{{.NIGHTKING_IP}}:26656"
+seeds = "{{.NIGHTKING_SEED_NODE_ID}}@{{.NIGHTKING_IP}}:26656"
 
 # Comma separated list of nodes to keep persistent connections to
 persistent_peers = ""

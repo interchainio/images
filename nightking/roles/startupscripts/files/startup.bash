@@ -11,8 +11,6 @@ if [ ! -f /var/log/nightking/.startup-finished ]; then
     /usr/local/sbin/create-tls.bash
     /usr/local/sbin/setup-influx.bash
     /usr/local/sbin/setup-grafana.bash
-  else
-    echo "${CACERT}" | tr '$' '\n' >> /etc/ssl/certs/ca-bundle.crt
   fi
   /usr/local/sbin/setup-telegraf.bash
   touch /var/log/nightking/.startup-finished

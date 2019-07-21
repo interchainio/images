@@ -4,6 +4,8 @@ exec 2>&1
 set -euo pipefail
 source /usr/local/sbin/library.bash
 
+set -x
+
 ## Sanitize EXPERIMENT input
 trap 'log node 10' ERR
 if [ "${EXPERIMENTS}" == "" ] || [ ! -d /etc/experiments/"${EXPERIMENTS}" ]; then
@@ -21,13 +23,13 @@ if [ -f /etc/experiments/"${XP}"/genesis.json ]; then
   mkdir -p /home/tendermint/.tendermint/config/
   stemplate /etc/experiments/"${XP}"/genesis.json -o /home/tendermint/.tendermint/config/ --env -f /etc/experiments/"${XP}"/config.toml
 fi
-if [ -f /etc/experiments/"${XP}"/node ]; then
+if [ -d /etc/experiments/"${XP}"/node ]; then
   mkdir -p /home/tendermint/.tendermint/config/
-  stemplate /etc/experiments/"${XP}"/node/ -o /home/tendermint/.tendermint/config/ --env -f /etc/experiments/"${XP}"/config.toml --all
+  stemplate /etc/experiments/"${XP}"/node/ -o /home/tendermint/.tendermint/ --env -f /etc/experiments/"${XP}"/config.toml --all
 fi
-if [ -f /etc/experiments/"${XP}"/node"{$ID}" ]; then
+if [ -d /etc/experiments/"${XP}"/node"${ID}" ]; then
   mkdir -p /home/tendermint/.tendermint/config/
-  stemplate /etc/experiments/"${XP}"/node/"${ID}" -o /home/tendermint/.tendermint/config/ --env -f /etc/experiments/"${XP}"/config.toml --all
+  stemplate /etc/experiments/"${XP}"/node"${ID}" -o /home/tendermint/.tendermint/ --env -f /etc/experiments/"${XP}"/config.toml --all
 fi
 chown -R tendermint.tendermint /home/tendermint/.tendermint
 sudo -u tendermint tendermint show_node_id > /var/log/nightking/node_id

@@ -5,9 +5,9 @@
 
 - name: Download tendermint binary
   get_url:
-    url: https://github.com/tendermint/tendermint/releases/download/v0.31.5/tendermint_v0.31.5_linux_amd64.zip
+    url: https://github.com/tendermint/tendermint/releases/download/v0.32.1/tendermint_v0.32.1_linux_amd64.zip
     dest: /tmp/tendermint.zip
-    checksum: sha256:1c865d28364b025b1849d9f9aab863bfbabd9bca4b58045b23ddf9a636409388
+    checksum: sha256:64a3dad4efce75d63b772fdff85216f809185d762b9232971c3270ef729cc331
 
 - name: Install tendermint binary
   unarchive:

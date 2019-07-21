@@ -9,9 +9,11 @@ module whitewalker{{.}} {
   role = "whitewalker"
   id = "{{ . }}"
   nightking_hostname = "{{ $.NIGHTKING_HOSTNAME }}"
-  nightking_ip = "{{ $.NIGHTKING_IP }}"
+  nightking_public_ip = "{{ $.NIGHTKING_IP }}"
+  nightking_private_ip = "{{ $.NIGHTKING_PRIVATE_IP }}"
+  nightking_seed_node_id = "{{ $.NIGHTKING_SEED_NODE_ID}}"
   telegraf = "{{ $.INFLUX_TELEGRAF_PASSWORD }}"
   experiments = "{{ $.XP }}"
-  cacert = "{{ $.CACERT }}"
+  user_data_base64_rendered = "${data.template_cloudinit_config.userdata.rendered}"
 }
 {{end}}

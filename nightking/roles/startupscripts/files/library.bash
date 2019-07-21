@@ -89,7 +89,7 @@ get-nightking-hostname() {
   cat /var/log/nightking/nightking-hostname
 }
 
-# Get nightking IP
+# Get nightking public IP
 get-nightking-ip() {
   if [ "${ROLE}" == "nightking" ]; then
     test -f /var/log/nightking/nightking-ip || get-public-ip > /var/log/nightking/nightking-ip
@@ -97,6 +97,16 @@ get-nightking-ip() {
     test -f /var/log/nightking/nightking-ip || (aws ec2 describe-tags --region "$(get-aws-region)" --filters "Name=resource-id,Values=$(get-instance-id)" | jq -r '.Tags[] | select( .Key | ascii_downcase == "nightking-ip" ).Value' > /var/log/nightking/nightking-ip && chmod 400 /var/log/nightking/nightking-ip)
   fi
   cat /var/log/nightking/nightking-ip
+}
+
+# Get nightking private IP
+get-nightking-private-ip() {
+  if [ "${ROLE}" == "nightking" ]; then
+    test -f /var/log/nightking/nightking-private-ip || get-private-ip > /var/log/nightking/nightking-private-ip
+  else
+    test -f /var/log/nightking/nightking-private-ip || (aws ec2 describe-tags --region "$(get-aws-region)" --filters "Name=resource-id,Values=$(get-instance-id)" | jq -r '.Tags[] | select( .Key | ascii_downcase == "nightking-private-ip" ).Value' > /var/log/nightking/nightking-private-ip && chmod 400 /var/log/nightking/nightking-private-ip)
+  fi
+  cat /var/log/nightking/nightking-private-ip
 }
 
 # Get node ID
@@ -107,6 +117,16 @@ get-id() {
     test -f /var/log/nightking/id || (aws ec2 describe-tags --region "$(get-aws-region)" --filters "Name=resource-id,Values=$(get-instance-id)" | jq -r '.Tags[] | select( .Key | ascii_downcase == "id" ).Value' > /var/log/nightking/id && chmod 400 /var/log/nightking/id)
   fi
   cat /var/log/nightking/id
+}
+
+# Get seed node ID
+get-nightking-seed-node-id() {
+  if [ "${ROLE}" == "nightking" ]; then
+    test -f /var/log/nightking/seed_node_id || return
+  else
+    test -f /var/log/nightking/seed_node_id || (aws ec2 describe-tags --region "$(get-aws-region)" --filters "Name=resource-id,Values=$(get-instance-id)" | jq -r '.Tags[] | select( .Key | ascii_downcase == "nightking-seed-node-id" ).Value' > /var/log/nightking/seed_node_id && chmod 400 /var/log/nightking/seed_node_id)
+  fi
+  cat /var/log/nightking/seed_node_id
 }
 
 # Get CA certificate
@@ -156,6 +176,7 @@ case "${ROLE}" in
   "stark"|"whitewalker")
 	# Get node ID
 	export ID="$(get-id)"
+	export NIGHTKING_SEED_NODE_ID="$(get-nightking-seed-node-id)"
 esac
 
 ## Common variables for all servers
@@ -179,7 +200,9 @@ export INFLUX_TELEGRAF_PASSWORD="$(get-influx-telegraf-password)"
 export EXPERIMENTS="$(get-experiments)"
 # Nightking hostname variable
 export NIGHTKING_HOSTNAME="$(get-nightking-hostname)"
-# Nightking IP variable
+# Nightking public IP variable
 export NIGHTKING_IP="$(get-nightking-ip)"
+# Nightking IP variable
+export NIGHTKING_PRIVATE_IP="$(get-nightking-private-ip)"
 # Get CA certificate
 export CACERT="$(get-ca-cert)"

@@ -38,6 +38,7 @@ do
     stemplate /etc/experiments/"${XP}"/seed/ -o /home/tendermint/.tendermint/ -f /etc/experiments/"${XP}"/config.toml --all
     chown -R tendermint.tendermint /home/tendermint/.tendermint
     sudo -u tendermint tendermint show_node_id > /var/log/nightking/seed_node_id
+    export NIGHTKING_SEED_NODE_ID="$(cat /var/log/nightking/seed_node_id)"
     systemctl start tendermint
     log seed 0
     trap '' ERR
@@ -67,6 +68,7 @@ do
 
     # Set up and run tm-load-test master - wait until it finishes
     if [ -f /etc/experiments/"${XP}"/config.toml ]; then
+      export DEBUG="$(stoml /etc/experiments/"${XP}"/config.toml DEBUG)"
       stemplate /etc/experiments/"${XP}"/load-test.toml --env -f /etc/experiments/"${XP}"/config.toml -o /home/tm-load-test
     else
       stemplate /etc/experiments/"${XP}"/load-test.toml -o /home/tm-load-test --env
@@ -74,8 +76,13 @@ do
     chown tm-load-test /home/tm-load-test/load-test.toml
     trap 'log tm-load-test 2' ERR
     log tm-load-test 1
-    sudo -u tm-load-test tm-load-test -master -c /home/tm-load-test/load-test.toml > "/home/tm-load-test/tm-load-test-${XP}-$(date +%Y%m%h-%H%M%S).log"
-    log tm-load-test 0
+    if [ -z "${DEBUG}" ]; then
+      RES=0
+      sudo -u tm-load-test tm-load-test -master -c /home/tm-load-test/load-test.toml || export RES=$?
+      log tm-load-test $RES
+    else
+      sudo -u tm-load-test tm-load-test -master -c /home/tm-load-test/load-test.toml
+    fi
 
     # Break down terraform
     trap 'log terraform_destroy 2' ERR
