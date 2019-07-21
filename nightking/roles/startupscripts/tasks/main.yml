@@ -7,4 +7,4 @@
   file: path=/var/log/nightking state=directory
 
 - name: Enable startup script at startup
-  cron: job=/usr/local/sbin/startup.bash special_time=reboot
+  cron: name=startupjob job=/usr/local/sbin/startup.bash special_time=reboot

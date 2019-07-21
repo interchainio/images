@@ -43,7 +43,7 @@ test -f /etc/pki/CA/serial || echo "00" > /etc/pki/CA/serial
 
 # Accept CA certificate on system
 cat /etc/pki/CA/cacert.pem >> /etc/ssl/certs/ca-bundle.crt
-cp /etc/pki/CA/cacert.pem /var/log/nightking/ca.crt
+cat /etc/pki/CA/cacert.pem | tr '\n' '$' > /var/log/nightking/ca.crt
 
 # Nightking certificate
 openssl genrsa -out /etc/ssl/nightking.key
