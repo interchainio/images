@@ -1,4 +1,0 @@
----
-
-- name: Copy experiments scripts
-  copy: "src=../../../experiments/ dest=/etc/experiments/"

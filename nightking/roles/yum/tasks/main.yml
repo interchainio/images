@@ -28,8 +28,10 @@
     name:
     - jq
     - yum-cron
+    - ntp
     state: latest
     lock_timeout: 180
+  notify: enable ntp
 
 - name: Copy yum-cron config
   copy: src=yum-cron.conf dest=/etc/yum/yum-cron.conf

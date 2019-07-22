@@ -9,6 +9,7 @@
 - name: Install InfluxDB
   yum:
     name: /tmp/influxdb.rpm
+    lock_timeout: 180
 
 
 - name: Download Telegraf
@@ -20,6 +21,7 @@
 - name: Install Telegraf
   yum:
     name: /tmp/telegraf.rpm
+    lock_timeout: 180
 
 
 - name: Download Grafana
@@ -31,6 +33,7 @@
 - name: Install Grafana
   yum:
     name: /tmp/grafana.rpm
+    lock_timeout: 180
 
 # keep the / at the end of dest so the folder is created
 - name: Copy permission override for grafana for privileged ports

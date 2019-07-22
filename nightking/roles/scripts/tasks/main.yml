@@ -1,5 +1,8 @@
 ---
 
+- name: Copy experiments scripts
+  copy: "src=../../../experiments/ dest=/etc/experiments/"
+
 - name: Copy startup scripts
   copy: "src=. dest=/usr/local/sbin mode=0755"
 

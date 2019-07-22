@@ -6,8 +6,7 @@
   become: yes
   become_user: root
   roles:
-    - updates
-    - ntp
+    - yum
     - { role: debug, when: DEBUG is defined and (DEBUG | bool) }
     - journald
     - openfiles
@@ -17,4 +16,4 @@
     - tm-load-test
     - monitoring
     - experiments
-    - startupscripts
+    - scripts
