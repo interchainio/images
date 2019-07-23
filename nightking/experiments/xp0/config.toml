@@ -22,6 +22,3 @@ whitewalkers_zones = ["us-east-1a"]
 
 # AWS EC2 instance type for Whitewalker and Stark nodes
 instance_type = "t2.micro"
-
-# Debug will enable troubleshooting. It will not delete infrastructure if an error happens.
-DEBUG = 1

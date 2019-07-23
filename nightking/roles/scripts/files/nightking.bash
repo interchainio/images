@@ -68,7 +68,6 @@ do
 
     # Set up and run tm-load-test master - wait until it finishes
     if [ -f /etc/experiments/"${XP}"/config.toml ]; then
-      export DEBUG="$(stoml /etc/experiments/"${XP}"/config.toml DEBUG)"
       stemplate /etc/experiments/"${XP}"/load-test.toml --env -f /etc/experiments/"${XP}"/config.toml -o /home/tm-load-test
     else
       stemplate /etc/experiments/"${XP}"/load-test.toml -o /home/tm-load-test --env
@@ -76,17 +75,18 @@ do
     chown tm-load-test /home/tm-load-test/load-test.toml
     trap 'log tm-load-test 2' ERR
     log tm-load-test 1
-    if [ -z "${DEBUG}" ]; then
-      RES=0
-      sudo -u tm-load-test tm-load-test -master -c /home/tm-load-test/load-test.toml || export RES=$?
-      log tm-load-test $RES
+    sudo -u tm-load-test tm-load-test -master -c /home/tm-load-test/load-test.toml || export LOAD_TEST_RESULT=$?
+    if [ "${LOAD_TEST_RESULT}" -ne 0 ]; then
+      log tm-load-test 2
     else
-      sudo -u tm-load-test tm-load-test -master -c /home/tm-load-test/load-test.toml
+      log tm-load-test 0
     fi
 
-    # Break down terraform
-    trap 'log terraform_destroy 2' ERR
-    log terraform_destroy 1
-    terraform destroy --force
-    log terraform_destroy 0
+    if [ -z "${DEBUG}" ]; then
+      # Break down terraform
+      trap 'log terraform_destroy 2' ERR
+      log terraform_destroy 1
+      terraform destroy --force
+      log terraform_destroy 0
+    fi
 done

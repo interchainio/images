@@ -61,6 +61,12 @@ get-password-tag() {
   cat /var/log/nightking/password_tag
 }
 
+# Get debug tag
+get-debug-tag() {
+  test -f /var/log/nightking/debug || (aws ec2 describe-tags --region "$(get-aws-region)" --filters "Name=resource-id,Values=$(get-instance-id)" | jq -r '.Tags[] | select( .Key | ascii_downcase == "debug" ).Value' > /var/log/nightking/debug && chmod 400 /var/log/nightking/debug)
+  cat /var/log/nightking/debug
+}
+
 # Get experiments in a space-separated list - always up-to-date
 get-experiments() {
   aws ec2 describe-tags --region "$(get-aws-region)" --filters "Name=resource-id,Values=$(get-instance-id)" | jq -r '.Tags[] | select( .Key | ascii_downcase == "experiments" ).Value' | tr ',' ' '
@@ -167,6 +173,8 @@ case "${ROLE}" in
 	export INFLUX_ADMIN_PASSWORD="$(get-influx-admin-password)"
 	# Grafana web interface password set in AWS tag
 	export PASSWORD_TAG="$(get-password-tag)"
+	# Debug flag set in AWS tag
+	export DEBUG="$(get-debug)"
 
 	# Get AMI owner
 	export AMI_OWNER="$(get-ami-owner)"

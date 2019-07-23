@@ -13,6 +13,18 @@ variable user-ip {
   description = "IP of the executing user so the user can log in to the web interface and SSH"
   type        = "string"
 }
+i
+variable default-password {
+  description = "Change the default password on the Grafana server from 'admin' to something else."
+  type        = "string"
+  default     = "notverysecurepassword"
+}
+
+variable debug {
+  description = "Set this to '1', to enable troubleshooting mode. This will keep all the infrastructure around after execution."
+  type        = "string
+  default     = ""
+}
 
 provider aws {
   region = "us-east-1"
@@ -141,5 +153,7 @@ resource aws_instance nightking {
     Name        = "nightking"
     role        = "nightking"
     experiments = "${var.nightking-experiments}"
+    debug       = "${var.debug}"
+    password    = "${var.default-password}"
   }
 }
