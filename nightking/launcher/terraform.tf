@@ -157,3 +157,8 @@ resource aws_instance nightking {
     password    = "${var.default-password}"
   }
 }
+
+output nightking {
+  value = "${aws_instance.nightking.public_dns}"
+}
+
