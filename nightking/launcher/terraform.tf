@@ -13,7 +13,7 @@ variable user-ip {
   description = "IP of the executing user so the user can log in to the web interface and SSH"
   type        = "string"
 }
-i
+
 variable default-password {
   description = "Change the default password on the Grafana server from 'admin' to something else."
   type        = "string"
@@ -22,7 +22,7 @@ variable default-password {
 
 variable debug {
   description = "Set this to '1', to enable troubleshooting mode. This will keep all the infrastructure around after execution."
-  type        = "string
+  type        = "string"
   default     = ""
 }
 

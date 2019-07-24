@@ -174,7 +174,7 @@ case "${ROLE}" in
 	# Grafana web interface password set in AWS tag
 	export PASSWORD_TAG="$(get-password-tag)"
 	# Debug flag set in AWS tag
-	export DEBUG="$(get-debug)"
+	export DEBUG="$(get-debug-tag)"
 
 	# Get AMI owner
 	export AMI_OWNER="$(get-ami-owner)"
