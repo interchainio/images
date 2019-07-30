@@ -87,7 +87,7 @@ get-role() {
 
 # Get nightking hostname
 get-nightking-hostname() {
-  if [ "${ROLE}" == "nightking" ]; then
+  if [ "$(get-role)" == "nightking" ]; then
     test -f /var/log/nightking/nightking-hostname || get-public-hostname > /var/log/nightking/nightking-hostname
   else
     test -f /var/log/nightking/nightking-hostname || (aws ec2 describe-tags --region "$(get-aws-region)" --filters "Name=resource-id,Values=$(get-instance-id)" | jq -r '.Tags[] | select( .Key | ascii_downcase == "nightking-hostname" ).Value' > /var/log/nightking/nightking-hostname && chmod 400 /var/log/nightking/nightking-hostname)
@@ -97,7 +97,7 @@ get-nightking-hostname() {
 
 # Get nightking public IP
 get-nightking-ip() {
-  if [ "${ROLE}" == "nightking" ]; then
+  if [ "$(get-role)" == "nightking" ]; then
     test -f /var/log/nightking/nightking-ip || get-public-ip > /var/log/nightking/nightking-ip
   else
     test -f /var/log/nightking/nightking-ip || (aws ec2 describe-tags --region "$(get-aws-region)" --filters "Name=resource-id,Values=$(get-instance-id)" | jq -r '.Tags[] | select( .Key | ascii_downcase == "nightking-ip" ).Value' > /var/log/nightking/nightking-ip && chmod 400 /var/log/nightking/nightking-ip)
@@ -107,7 +107,7 @@ get-nightking-ip() {
 
 # Get nightking private IP
 get-nightking-private-ip() {
-  if [ "${ROLE}" == "nightking" ]; then
+  if [ "$(get-role)" == "nightking" ]; then
     test -f /var/log/nightking/nightking-private-ip || get-private-ip > /var/log/nightking/nightking-private-ip
   else
     test -f /var/log/nightking/nightking-private-ip || (aws ec2 describe-tags --region "$(get-aws-region)" --filters "Name=resource-id,Values=$(get-instance-id)" | jq -r '.Tags[] | select( .Key | ascii_downcase == "nightking-private-ip" ).Value' > /var/log/nightking/nightking-private-ip && chmod 400 /var/log/nightking/nightking-private-ip)
@@ -117,8 +117,8 @@ get-nightking-private-ip() {
 
 # Get node ID
 get-id() {
-  if [ "${ROLE}" == "nightking" ]; then
-    test -f /var/log/nightking/id || cat "0" > /var/log/nightking/id
+  if [ "$(get-role)" == "nightking" ]; then
+    test -f /var/log/nightking/id || echo "0" > /var/log/nightking/id
   else
     test -f /var/log/nightking/id || (aws ec2 describe-tags --region "$(get-aws-region)" --filters "Name=resource-id,Values=$(get-instance-id)" | jq -r '.Tags[] | select( .Key | ascii_downcase == "id" ).Value' > /var/log/nightking/id && chmod 400 /var/log/nightking/id)
   fi
@@ -127,7 +127,7 @@ get-id() {
 
 # Get seed node ID
 get-nightking-seed-node-id() {
-  if [ "${ROLE}" == "nightking" ]; then
+  if [ "$(get-role)" == "nightking" ]; then
     test -f /var/log/nightking/seed_node_id || return
   else
     test -f /var/log/nightking/seed_node_id || (aws ec2 describe-tags --region "$(get-aws-region)" --filters "Name=resource-id,Values=$(get-instance-id)" | jq -r '.Tags[] | select( .Key | ascii_downcase == "nightking-seed-node-id" ).Value' > /var/log/nightking/seed_node_id && chmod 400 /var/log/nightking/seed_node_id)
@@ -137,7 +137,7 @@ get-nightking-seed-node-id() {
 
 # Get CA certificate
 get-ca-cert() {
-  if [ "${ROLE}" != "nightking" ]; then
+  if [ "$(get-role)" != "nightking" ]; then
     test -f /var/log/nightking/ca.crt || (aws ec2 describe-tags --region "$(get-aws-region)" --filters "Name=resource-id,Values=$(get-instance-id)" | jq -r '.Tags[] | select( .Key | ascii_downcase == "cacert" ).Value' > /var/log/nightking/ca.crt && chmod 400 /var/log/nightking/ca.crt)
   fi
   cat /var/log/nightking/ca.crt
@@ -145,7 +145,7 @@ get-ca-cert() {
 
 # Get AMI owner
 get-ami-owner() {
-  if [ "${ROLE}" == "nightking" ]; then
+  if [ "$(get-role)" == "nightking" ]; then
     test -f /var/log/nightking/ami-owner || (aws ec2 describe-images --region "$(get-aws-region)" --image-ids "$(get-ami)" | jq -r '.Images[0].OwnerId' > /var/log/nightking/ami-owner && chmod 400 /var/log/nightking/ami-owner)
   else
     test -f /var/log/nightking/ami-owner || (aws ec2 describe-tags --region "$(get-aws-region)" --filters "Name=resource-id,Values=$(get-instance-id)" | jq -r '.Tags[] | select( .Key | ascii_downcase == "ami-owner" ).Value' > /var/log/nightking/ami-owner && chmod 400 /var/log/nightking/ami-owner)
@@ -155,7 +155,7 @@ get-ami-owner() {
 
 # Get AMI name
 get-ami-name() {
-  if [ "${ROLE}" == "nightking" ]; then
+  if [ "$(get-role)" == "nightking" ]; then
     test -f /var/log/nightking/ami-name || (aws ec2 describe-images --region "$(get-aws-region)" --image-ids "$(get-ami)" | jq -r '.Images[0].Name' > /var/log/nightking/ami-name && chmod 400 /var/log/nightking/ami-name)
   else
     test -f /var/log/nightking/ami-name || (aws ec2 describe-tags --region "$(get-aws-region)" --filters "Name=resource-id,Values=$(get-instance-id)" | jq -r '.Tags[] | select( .Key | ascii_downcase == "ami-name" ).Value' > /var/log/nightking/ami-name && chmod 400 /var/log/nightking/ami-name)
@@ -182,8 +182,6 @@ case "${ROLE}" in
 	export AMI_NAME="$(get-ami-name)"
   	;;
   "stark"|"whitewalker")
-	# Get node ID
-	export ID="$(get-id)"
 	export NIGHTKING_SEED_NODE_ID="$(get-nightking-seed-node-id)"
 esac
 
@@ -203,6 +201,8 @@ export AWS_REGION="$(get-aws-region)"
 # InfluxDB Telegraf password variable
 
 ## Variables that are retrieved differently on different $ROLE servers
+# Get node ID
+export ID="$(get-id)"
 export INFLUX_TELEGRAF_PASSWORD="$(get-influx-telegraf-password)"
 # Experiments listed in AWS tag
 export EXPERIMENTS="$(get-experiments)"

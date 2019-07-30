@@ -75,6 +75,7 @@ do
     chown tm-load-test /home/tm-load-test/load-test.toml
     trap 'log tm-load-test 2' ERR
     log tm-load-test 1
+    export LOAD_TEST_RESULT=0
     sudo -u tm-load-test tm-load-test -master -c /home/tm-load-test/load-test.toml || export LOAD_TEST_RESULT=$?
     if [ "${LOAD_TEST_RESULT}" -ne 0 ]; then
       log tm-load-test 2

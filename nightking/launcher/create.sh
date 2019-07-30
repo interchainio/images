@@ -13,5 +13,5 @@ fi
 MYIP="$(curl -s http://whatismyip.akamai.com/)"
 
 terraform init
-terraform apply -var user-ip="${MYIP}" -var nightking-ami="${1}"
+terraform apply -var user-ip="${MYIP}" -var nightking-ami="${1}" --auto-approve
 
