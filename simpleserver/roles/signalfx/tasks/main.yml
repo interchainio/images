@@ -17,3 +17,9 @@
     allow_downgrade: yes
     update_cache: yes
 
+- name: write signalfx config
+  copy:
+    content: "{{ sfx_agent_config | to_nice_yaml }}"
+    dest: "{{ sfx_conf_file_path }}"
+    owner: signalfx-agent
+    group: signalfx-agent
