@@ -1,4 +1,4 @@
-FROM tendermint/tendermint:v0.33.2
+FROM tendermint/tendermint:v0.32.9
 
 COPY --chown=tmuser:tmuser tmhome/ /tendermint
 CMD ["node"]

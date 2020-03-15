@@ -1,4 +1,4 @@
 # Single-node tendermint network config
 
-Node ID: `c9eff2dae31d8ea72afe44d2c6c9ef62bcfe068c`
+Node ID: `ddcb266ae76a3d789316faa3e63e155c89785e23`
 
